@@ -71,7 +71,7 @@ export default async function AdminDashboardPage() {
       <div className="bg-[#071A14] border-b border-white/5">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <span className="text-white font-bold text-lg">tsc<span className="text-[#59D66F]">⚡</span></span>
+            <span className="text-white font-bold text-lg">TSC<span className="text-[#59D66F]"></span></span>
             <span className="text-gray-500 text-sm">/ Admin</span>
           </div>
           <div className="flex items-center gap-4">

@@ -36,7 +36,7 @@ export default function CtaBanner({
                 <div
                     aria-labelledby={id}
                     className="relative w-full overflow-hidden rounded-2xl bg-cover bg-center"
-                    style={{ backgroundImage: "url('/images/hero-bg.webp')" }}
+                    style={{ backgroundImage: "url('/images/home-hero.webp')" }}
                 >
                     <div className="absolute inset-0 bg-[#071A14]/80" />
 

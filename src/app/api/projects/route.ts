@@ -26,57 +26,30 @@ export async function GET(request: Request) {
   }
 }
 
-// PUT /api/projects (bulk or based on query parameters, placeholder as requested)
-export async function PUT(request: Request) {
+// POST /api/projects
+export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { id, ...data } = body;
+    const newProject = await projectService.createProject(body);
 
-    if (!id) {
-      return NextResponse.json(
-        { success: false, error: "Project ID is required in body" },
-        { status: 400 }
-      );
-    }
-
-    const updatedProject = await projectService.updateProject(id, data);
-
-    return NextResponse.json({
-      success: true,
-      message: "Project updated successfully",
-      data: updatedProject,
-    });
-  } catch (error: any) {
     return NextResponse.json(
-      { success: false, error: error.message || "Failed to update project" },
-      { status: 500 }
+      {
+        success: true,
+        message: "Project created successfully",
+        data: newProject,
+      },
+      { status: 201 }
     );
-  }
-}
-
-// DELETE /api/projects (based on query parameter or body, placeholder as requested)
-export async function DELETE(request: Request) {
-  try {
-    const { searchParams } = new URL(request.url);
-    const id = searchParams.get("id");
-
-    if (!id) {
+  } catch (error: any) {
+    if (error.message && error.message.includes("already exists")) {
       return NextResponse.json(
-        { success: false, error: "Project ID is required as query parameter (?id=...)" },
-        { status: 400 }
+        { success: false, error: error.message },
+        { status: 409 }
       );
     }
-
-    await projectService.deleteProject(id);
-
-    return NextResponse.json({
-      success: true,
-      message: "Project deleted successfully",
-    });
-  } catch (error: any) {
     return NextResponse.json(
-      { success: false, error: error.message || "Failed to delete project" },
-      { status: 500 }
+      { success: false, error: error.message || "Failed to create project" },
+      { status: 400 }
     );
   }
 }

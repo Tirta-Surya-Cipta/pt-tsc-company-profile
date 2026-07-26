@@ -24,8 +24,8 @@ export const projectSchema = z.object({
   solution: z.string().min(10, "Solution must be at least 10 characters"),
   result: z.string().min(10, "Result must be at least 10 characters"),
   highlights: z.array(z.string()).default([]),
-  thumbnailImage: z.string().url("Invalid image URL"),
-  galleryImages: z.array(z.string().url("Invalid image URL")).default([]),
+  thumbnailImage: z.string().min(1, "Thumbnail image is required"),
+  galleryImages: z.array(z.string()).default([]),
 });
 
 export type ProjectInput = z.infer<typeof projectSchema>;

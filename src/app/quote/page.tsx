@@ -13,11 +13,11 @@ export default function QuotePage() {
       <section className="relative pt-32 pb-20 bg-[#071A14] overflow-hidden">
         {/* Background elements */}
         <div className="absolute inset-0 bg-gradient-to-r from-[#071A14] via-[#071A14]/80 to-[#071A14]/30 z-10" />
-        <div 
+        <div
           className="absolute inset-0 bg-cover bg-center opacity-30 mix-blend-luminosity"
           style={{ backgroundImage: "url('/images/hero-bg.jpg')" }}
         />
-        
+
         <div className="relative z-20 max-w-7xl mx-auto px-6 lg:px-12 flex flex-col lg:flex-row gap-12 items-center">
           <div className="flex-1 text-white">
             <FadeUp>
@@ -28,50 +28,51 @@ export default function QuotePage() {
               <p className="text-gray-300 text-sm sm:text-base leading-relaxed max-w-lg mb-10">
                 Fill in the form below with your project details and requirements. Our engineering team will review your information and respond with the most relevant solution and next steps.
               </p>
-              
+
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex items-start gap-3">
-                   <div className="w-8 h-8 rounded-lg bg-[#1F6B45]/40 border border-[#2E8B57]/30 flex items-center justify-center shrink-0">
-                     <FileText size={14} className="text-[#59D66F]" />
-                   </div>
-                   <span className="text-xs font-semibold text-white leading-snug">Detailed Engineering<br/>Review</span>
+                  <div className="w-8 h-8 rounded-lg bg-[#1F6B45]/40 border border-[#2E8B57]/30 flex items-center justify-center shrink-0">
+                    <FileText size={14} className="text-[#59D66F]" />
+                  </div>
+                  <span className="text-xs font-semibold text-white leading-snug">Detailed Engineering<br />Review</span>
                 </div>
                 <div className="flex items-start gap-3">
-                   <div className="w-8 h-8 rounded-lg bg-[#1F6B45]/40 border border-[#2E8B57]/30 flex items-center justify-center shrink-0">
-                     <Users size={14} className="text-[#59D66F]" />
-                   </div>
-                   <span className="text-xs font-semibold text-white leading-snug">Practical & Reliable<br/>Solutions</span>
+                  <div className="w-8 h-8 rounded-lg bg-[#1F6B45]/40 border border-[#2E8B57]/30 flex items-center justify-center shrink-0">
+                    <Users size={14} className="text-[#59D66F]" />
+                  </div>
+                  <span className="text-xs font-semibold text-white leading-snug">Practical & Reliable<br />Solutions</span>
                 </div>
                 <div className="flex items-start gap-3">
-                   <div className="w-8 h-8 rounded-lg bg-[#1F6B45]/40 border border-[#2E8B57]/30 flex items-center justify-center shrink-0">
-                     <Headphones size={14} className="text-[#59D66F]" />
-                   </div>
-                   <span className="text-xs font-semibold text-white leading-snug">Responsive Follow-<br/>up & Support</span>
+                  <div className="w-8 h-8 rounded-lg bg-[#1F6B45]/40 border border-[#2E8B57]/30 flex items-center justify-center shrink-0">
+                    <Headphones size={14} className="text-[#59D66F]" />
+                  </div>
+                  <span className="text-xs font-semibold text-white leading-snug">Responsive Follow-<br />up & Support</span>
                 </div>
                 <div className="flex items-start gap-3">
-                   <div className="w-8 h-8 rounded-lg bg-[#1F6B45]/40 border border-[#2E8B57]/30 flex items-center justify-center shrink-0">
-                     <Shield size={14} className="text-[#59D66F]" />
-                   </div>
-                   <span className="text-xs font-semibold text-white leading-snug">Long-Term Project<br/>Partnership</span>
+                  <div className="w-8 h-8 rounded-lg bg-[#1F6B45]/40 border border-[#2E8B57]/30 flex items-center justify-center shrink-0">
+                    <Shield size={14} className="text-[#59D66F]" />
+                  </div>
+                  <span className="text-xs font-semibold text-white leading-snug">Long-Term Project<br />Partnership</span>
                 </div>
               </div>
             </FadeUp>
           </div>
-          
-          <div className="flex-1 w-full relative h-[450px]">
-             <FadeUp delay={200} className="w-full h-full">
-               <div className="grid grid-cols-2 grid-rows-2 gap-3 h-full">
-                  <div className="col-span-2 row-span-1 rounded-xl overflow-hidden bg-[#1F6B45]">
-                    <div className="w-full h-full bg-[url('/images/project-1a.jpg')] bg-cover bg-center opacity-80 mix-blend-multiply" />
-                  </div>
-                  <div className="rounded-xl overflow-hidden bg-[#2E8B57]">
-                    <div className="w-full h-full bg-[url('/images/project-1b.jpg')] bg-cover bg-center opacity-80 mix-blend-multiply" />
-                  </div>
-                  <div className="rounded-xl overflow-hidden bg-[#3a5a42]">
-                    <div className="w-full h-full bg-[url('/images/project-1c.jpg')] bg-cover bg-center opacity-80 mix-blend-multiply" />
-                  </div>
-               </div>
-             </FadeUp>
+
+          {/* Right Images (Mosaic) */}
+          <div className="flex-1 w-full relative h-[400px]">
+            <FadeUp delay={200} className="w-full h-full">
+              <div className="grid grid-cols-2 grid-rows-2 gap-3 h-full">
+                <div className="col-span-2 row-span-1 rounded-xl overflow-hidden">
+                  <div className="w-full h-full bg-cover bg-center opacity-80" style={{ backgroundImage: "url('/images/about-hero.webp')" }} />
+                </div>
+                <div className="rounded-xl overflow-hidden">
+                  <div className="w-full h-full bg-cover bg-center opacity-80" style={{ backgroundImage: "url('/images/vfd.webp')" }} />
+                </div>
+                <div className="rounded-xl overflow-hidden">
+                  <div className="w-full h-full bg-cover bg-center opacity-80" style={{ backgroundImage: "url('/images/mining.webp')" }} />
+                </div>
+              </div>
+            </FadeUp>
           </div>
         </div>
       </section>
@@ -80,7 +81,7 @@ export default function QuotePage() {
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
           <div className="flex flex-col lg:flex-row gap-10">
-            
+
             {/* Left: Form */}
             <FadeUp className="flex-[2]">
               <QuoteForm />
@@ -88,12 +89,12 @@ export default function QuotePage() {
 
             {/* Right: Info Panels */}
             <div className="flex-1 flex flex-col gap-6">
-              
+
               {/* Timeline Info */}
               <FadeUp delay={100} className="bg-[#F7F9F8] rounded-2xl border border-gray-100 p-6 sm:p-8 shadow-sm">
                 <h3 className="font-bold text-[#1E293B] text-base mb-6">What happens next?</h3>
                 <div className="space-y-6 relative before:absolute before:inset-0 before:ml-[15px] before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-[#59D66F] before:to-transparent">
-                  
+
                   <div className="relative flex items-start gap-4">
                     <div className="w-8 h-8 rounded-full bg-[#DDE9E2] border border-[#2E8B57]/20 flex items-center justify-center shrink-0 z-10 text-[#1F6B45] text-xs font-bold">01</div>
                     <div>
@@ -101,7 +102,7 @@ export default function QuotePage() {
                       <p className="text-xs text-[#6B7280] leading-relaxed">Our engineering team will review your project information and requirements carefully.</p>
                     </div>
                   </div>
-                  
+
                   <div className="relative flex items-start gap-4">
                     <div className="w-8 h-8 rounded-full bg-[#DDE9E2] border border-[#2E8B57]/20 flex items-center justify-center shrink-0 z-10 text-[#1F6B45] text-xs font-bold">02</div>
                     <div>
@@ -109,7 +110,7 @@ export default function QuotePage() {
                       <p className="text-xs text-[#6B7280] leading-relaxed">We identify the best solution approach, scope of work, and technical considerations.</p>
                     </div>
                   </div>
-                  
+
                   <div className="relative flex items-start gap-4">
                     <div className="w-8 h-8 rounded-full bg-[#DDE9E2] border border-[#2E8B57]/20 flex items-center justify-center shrink-0 z-10 text-[#1F6B45] text-xs font-bold">03</div>
                     <div>
@@ -186,7 +187,7 @@ export default function QuotePage() {
             <p className="text-[#1F6B45] text-[11px] font-bold tracking-[0.2em] uppercase mb-4">WHY REQUEST A QUOTE FROM TSC</p>
             <h2 className="text-3xl sm:text-4xl font-bold text-[#1E293B] mb-12">Practical Engineering. Reliable Solutions. Long-Term Support.</h2>
           </FadeUp>
-          
+
           <div className="grid grid-cols-2 lg:grid-cols-5 gap-8">
             {[
               { icon: Settings, title: "Engineering Expertise", desc: "We deliver practical and reliable engineering solutions tailored to your application" },

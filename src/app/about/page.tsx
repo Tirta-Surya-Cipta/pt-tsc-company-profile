@@ -3,6 +3,7 @@
 import { FadeUp } from "@/components/shared/FadeUp";
 import { CapabilitiesGrid } from "@/components/capabilities/CapabilitiesGrid";
 import { ServiceProcess } from "@/components/capabilities/ServiceProcess";
+import CtaBanner from '@/components/shared/CtaBanner';
 import { Settings, Zap, Headphones, Target, Shield, CheckCircle2, MessageCircle, ArrowRight, Eye, Target as TargetMission } from "lucide-react";
 import Link from "next/link";
 
@@ -15,7 +16,7 @@ export default function AboutPage() {
         <div className="absolute inset-0 bg-gradient-to-r from-[#071A14]/90 via-[#071A14]/80 to-[#071A14]/30 z-10" />
         <div
           className="absolute inset-0 bg-cover bg-center opacity-40 mix-blend-luminosity"
-          style={{ backgroundImage: "url('/images/hero-bg.jpg')" }}
+          style={{ backgroundImage: "url('/images/about-hero.webp')" }}
         />
 
         <div className="relative z-20 max-w-7xl mx-auto px-6 lg:px-12 flex flex-col lg:flex-row gap-12 items-center w-full">
@@ -127,7 +128,7 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto px-6 lg:px-12 flex flex-col md:flex-row gap-12 items-center">
           <FadeUp className="flex-1 w-full relative h-[400px] rounded-2xl overflow-hidden bg-gray-100">
             {/* Placeholder for director image */}
-            <div className="absolute inset-0 bg-[url('/images/director.webp')] bg-cover bg-center" />
+            <div className="absolute inset-0 bg-[url('/images/about-director.webp')] bg-cover bg-center" />
           </FadeUp>
           <div className="flex-1">
             <FadeUp delay={150}>
@@ -191,33 +192,10 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ══ CTA BANNER ══ */}
-      <section>
-        <div className="relative bg-[#071A14] overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-[#071A14]/90 via-[#071A14]/70 to-[#071A14]/90 z-10" />
-          <div className="absolute inset-0 bg-[url('/images/hero-bg.jpg')] bg-cover bg-center opacity-30 mix-blend-luminosity" />
-
-          <div className="relative z-20 max-w-7xl mx-auto px-6 lg:px-12 py-16 flex flex-col md:flex-row items-center justify-between gap-8">
-            <FadeUp className="max-w-2xl text-center md:text-left">
-              <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
-                Let's Build Reliable<br />Solutions for Your Industry
-              </h2>
-              <p className="text-gray-300 text-sm md:text-base leading-relaxed">
-                We're ready to understand your needs and deliver the right automation and electrical solutions for your operations.
-              </p>
-            </FadeUp>
-
-            <FadeUp delay={100} className="flex flex-col sm:flex-row gap-4 shrink-0">
-              <Link href="/quote" className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg bg-[#59D66F] text-[#071A14] text-sm font-bold hover:bg-[#4bc45e] transition-colors">
-                Request a Quote <ArrowRight size={14} />
-              </Link>
-              <a href="https://wa.me/6285159775365" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg border border-white/20 text-white text-sm font-bold hover:bg-white/10 transition-colors">
-                <MessageCircle size={14} /> Chat on WhatsApp
-              </a>
-            </FadeUp>
-          </div>
-        </div>
-      </section>
+      <CtaBanner
+        heading="Let’s Build Reliable Solutions for Your Industry"
+        subtext="We’re ready to understand your needs and deliver the right automation and electrical solutions for your operations."
+      />
     </main>
   );
 }

@@ -1,49 +1,38 @@
 "use client";
 
 import * as React from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { contactSchema, ContactInput } from "@/server/validators/contact.validator";
+import { submitQuoteRequest } from "@/actions/inbox";
 import { toast } from "sonner";
-import axios from "axios";
-import { MapPin, Mail, Phone, Clock, Loader2, MessageCircle, ArrowRight, CheckCircle2, Check, HelpCircle, Wrench, Shield, Cpu, Headphones } from "lucide-react";
+import { MapPin, Mail, Phone, Clock, Loader2, MessageCircle, ArrowRight, CheckCircle2, Check, HelpCircle, Wrench, Shield, Cpu, Headphones, AlertCircle } from "lucide-react";
 import Link from "next/link";
 import { FadeUp } from "@/components/shared/FadeUp";
+import CtaBanner from '@/components/shared/CtaBanner';
 
 export default function ContactPage() {
   const [submitting, setSubmitting] = React.useState(false);
+  const [status, setStatus] = React.useState<{ success?: boolean; message?: string; error?: string } | null>(null);
 
-  // Extend the form state internally to match mockup fields if needed, 
-  // but we'll bind strictly to the schema for actual submission.
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm<ContactInput>({
-    resolver: zodResolver(contactSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-      company: "",
-      phone: "",
-      subject: "",
-      message: "",
-    },
-  });
-
-  const onSubmit = async (data: ContactInput) => {
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     setSubmitting(true);
+    setStatus(null);
+
+    const formElement = e.currentTarget;
+    const formData = new FormData(formElement);
+
     try {
-      const response = await axios.post("/api/contact", data);
-      if (response.data.success) {
-        toast.success("Lead registered successfully. Our engineers will follow up!");
-        reset();
-      } else {
-        toast.error(response.data.error || "Failed to submit message");
+      const res = await submitQuoteRequest(formData);
+      setStatus(res);
+      if (res.success) {
+        toast.success(res.message || "Pesan berhasil dikirim!");
+        formElement.reset();
+      } else if (res.error) {
+        toast.error(res.error);
       }
-    } catch (error: any) {
-      toast.error(error.response?.data?.error || "Connection error. Please try again.");
+    } catch (err: any) {
+      const errorMsg = err.message || "Terjadi kesalahan koneksi. Silakan coba lagi.";
+      setStatus({ error: errorMsg });
+      toast.error(errorMsg);
     } finally {
       setSubmitting(false);
     }
@@ -82,14 +71,14 @@ export default function ContactPage() {
           <div className="flex-1 w-full relative h-[400px]">
             <FadeUp delay={200} className="w-full h-full">
               <div className="grid grid-cols-2 grid-rows-2 gap-3 h-full">
-                <div className="col-span-2 row-span-1 rounded-xl overflow-hidden bg-[#1F6B45]">
-                  <div className="w-full h-full bg-cover bg-center opacity-80" style={{ backgroundImage: "url('/images/project-1a.jpg')" }} />
+                <div className="col-span-2 row-span-1 rounded-xl overflow-hidden">
+                  <div className="w-full h-full bg-cover bg-center opacity-80" style={{ backgroundImage: "url('/images/about-hero.webp')" }} />
                 </div>
-                <div className="rounded-xl overflow-hidden bg-[#2E8B57]">
-                  <div className="w-full h-full bg-cover bg-center opacity-80" style={{ backgroundImage: "url('/images/project-1b.jpg')" }} />
+                <div className="rounded-xl overflow-hidden">
+                  <div className="w-full h-full bg-cover bg-center opacity-80" style={{ backgroundImage: "url('/images/vfd.webp')" }} />
                 </div>
-                <div className="rounded-xl overflow-hidden bg-[#3a5a42]">
-                  <div className="w-full h-full bg-cover bg-center opacity-80" style={{ backgroundImage: "url('/images/project-1c.jpg')" }} />
+                <div className="rounded-xl overflow-hidden">
+                  <div className="w-full h-full bg-cover bg-center opacity-80" style={{ backgroundImage: "url('/images/mining.webp')" }} />
                 </div>
               </div>
             </FadeUp>
@@ -178,25 +167,44 @@ export default function ContactPage() {
                   Tell us about your inquiry, project challenge, or support requirement. Our team will review your message and respond through the most relevant contact channel.
                 </p>
 
-                <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+                {/* Indikator UI Success / Error */}
+                {status?.success && (
+                  <div className="mb-6 p-4 rounded-lg bg-green-50 border border-green-200 flex items-center gap-3 text-green-800 text-sm">
+                    <CheckCircle2 className="w-5 h-5 text-green-600 shrink-0" />
+                    <div>
+                      <p className="font-semibold">Success!</p>
+                      <p>{status.message}</p>
+                    </div>
+                  </div>
+                )}
+                {status?.error && (
+                  <div className="mb-6 p-4 rounded-lg bg-red-50 border border-red-200 flex items-center gap-3 text-red-800 text-sm">
+                    <AlertCircle className="w-5 h-5 text-red-600 shrink-0" />
+                    <div>
+                      <p className="font-semibold">Error!</p>
+                      <p>{status.error}</p>
+                    </div>
+                  </div>
+                )}
+
+                <form onSubmit={handleFormSubmit} className="space-y-5">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <div className="space-y-1.5">
                       <label className="text-xs font-bold text-[#1E293B]">Full Name <span className="text-red-500">*</span></label>
                       <input
-                        {...register("name")}
+                        name="fullName"
+                        required
                         className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-[#59D66F] focus:ring-1 focus:ring-[#59D66F]/20 transition-all bg-gray-50/50"
                         placeholder="Enter your full name"
                       />
-                      {errors.name && <p className="text-[11px] text-red-500">{errors.name.message}</p>}
                     </div>
                     <div className="space-y-1.5">
-                      <label className="text-xs font-bold text-[#1E293B]">Company Name <span className="text-red-500">*</span></label>
+                      <label className="text-xs font-bold text-[#1E293B]">Company Name</label>
                       <input
-                        {...register("company")}
+                        name="companyName"
                         className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-[#59D66F] focus:ring-1 focus:ring-[#59D66F]/20 transition-all bg-gray-50/50"
                         placeholder="Enter your company name"
                       />
-                      {errors.company && <p className="text-[11px] text-red-500">{errors.company.message}</p>}
                     </div>
                   </div>
 
@@ -204,46 +212,36 @@ export default function ContactPage() {
                     <div className="space-y-1.5">
                       <label className="text-xs font-bold text-[#1E293B]">Email Address <span className="text-red-500">*</span></label>
                       <input
-                        {...register("email")}
+                        name="email"
                         type="email"
+                        required
                         className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-[#59D66F] focus:ring-1 focus:ring-[#59D66F]/20 transition-all bg-gray-50/50"
                         placeholder="Enter your email address"
                       />
-                      {errors.email && <p className="text-[11px] text-red-500">{errors.email.message}</p>}
                     </div>
                     <div className="space-y-1.5">
-                      <label className="text-xs font-bold text-[#1E293B]">Phone / WhatsApp <span className="text-red-500">*</span></label>
+                      <label className="text-xs font-bold text-[#1E293B]">Phone / WhatsApp</label>
                       <input
-                        {...register("phone")}
+                        name="phone"
                         className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-[#59D66F] focus:ring-1 focus:ring-[#59D66F]/20 transition-all bg-gray-50/50"
                         placeholder="Enter your phone number"
                       />
-                      {errors.phone && <p className="text-[11px] text-red-500">{errors.phone.message}</p>}
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <div className="space-y-1.5">
-                      <label className="text-xs font-bold text-[#1E293B]">Subject <span className="text-red-500">*</span></label>
-                      <input
-                        {...register("subject")}
-                        className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-[#59D66F] focus:ring-1 focus:ring-[#59D66F]/20 transition-all bg-gray-50/50"
-                        placeholder="Enter subject"
-                      />
-                      {errors.subject && <p className="text-[11px] text-red-500">{errors.subject.message}</p>}
-                    </div>
-                    <div className="space-y-1.5">
-                      <label className="text-xs font-bold text-[#1E293B]">Service / Inquiry Type <span className="text-red-500">*</span></label>
+                      <label className="text-xs font-bold text-[#1E293B]">Service / Inquiry Type</label>
                       <select
-                        className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-[#59D66F] focus:ring-1 focus:ring-[#59D66F]/20 transition-all bg-gray-50/50 appearance-none text-[#6B7280]"
-                        defaultValue=""
+                        name="serviceType"
+                        className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-[#59D66F] focus:ring-1 focus:ring-[#59D66F]/20 transition-all bg-gray-50/50 appearance-none text-[#1E293B]"
+                        defaultValue="Automation System"
                       >
-                        <option value="" disabled>Select inquiry type</option>
-                        <option value="automation">Automation System</option>
-                        <option value="panel">Panel Integration</option>
-                        <option value="vsd">Inverter / VSD</option>
-                        <option value="service">Technical Service</option>
-                        <option value="other">Other</option>
+                        <option value="Automation System">Automation System</option>
+                        <option value="Panel Integration">Panel Integration</option>
+                        <option value="Inverter / VSD">Inverter / VSD</option>
+                        <option value="Technical Service">Technical Service</option>
+                        <option value="Lain-lain">Other / Lain-lain</option>
                       </select>
                     </div>
                   </div>
@@ -251,24 +249,24 @@ export default function ContactPage() {
                   <div className="space-y-1.5">
                     <label className="text-xs font-bold text-[#1E293B]">Message / Project Notes <span className="text-red-500">*</span></label>
                     <textarea
-                      {...register("message")}
+                      name="message"
+                      required
                       rows={4}
                       className="w-full px-4 py-3 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-[#59D66F] focus:ring-1 focus:ring-[#59D66F]/20 transition-all bg-gray-50/50 resize-none"
                       placeholder="Please describe your inquiry or project requirement in detail..."
                     ></textarea>
-                    {errors.message && <p className="text-[11px] text-red-500">{errors.message.message}</p>}
                   </div>
 
                   <div className="flex items-center gap-3 pt-2">
-                    <input type="checkbox" id="consent" className="w-4 h-4 rounded border-gray-300 text-[#59D66F] focus:ring-[#59D66F]" />
-                    <label htmlFor="consent" className="text-xs text-[#6B7280]">I agree to be contacted regarding this inquiry</label>
+                    <input type="checkbox" id="contactConsent" name="consent" required className="w-4 h-4 rounded border-gray-300 text-[#59D66F] focus:ring-[#59D66F]" />
+                    <label htmlFor="contactConsent" className="text-xs text-[#6B7280]">I agree to be contacted regarding this inquiry</label>
                   </div>
 
                   <div className="pt-4 flex justify-end">
                     <button
                       type="submit"
                       disabled={submitting}
-                      className="w-full md:w-auto px-8 py-3 bg-[#59D66F] text-[#071A14] font-bold text-sm rounded-lg hover:bg-[#4bc45e] transition-colors flex items-center justify-center gap-2"
+                      className="w-full md:w-auto px-8 py-3 bg-[#59D66F] text-[#071A14] font-bold text-sm rounded-lg hover:bg-[#4bc45e] transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
                     >
                       {submitting && <Loader2 className="w-4 h-4 animate-spin" />}
                       Submit Your Request
@@ -390,81 +388,11 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* ══ CTA BANNER ══ */}
-      <section>
-        <div className="relative bg-[#071A14] overflow-hidden">
-          <div
-            className="absolute inset-0 bg-cover bg-center opacity-20"
-            style={{ backgroundImage: "url('/images/hero-bg.jpg')", mixBlendMode: 'luminosity' }}
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#071A14]/90 via-[#071A14]/60 to-[#071A14]/90" />
-
-          <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 py-14">
-            <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-10">
-
-              <FadeUp className="max-w-md">
-                <h2 className="text-white text-2xl sm:text-3xl font-bold leading-snug mb-3">
-                  Have a Project Requirement to Discuss?
-                </h2>
-                <p className="text-gray-400 text-sm leading-relaxed">
-                  If you already have a defined scope, technical requirement, or planned upgrade, submit a quote request and our team will review your project needs.
-                </p>
-              </FadeUp>
-
-              <FadeUp delay={100} className="flex flex-col sm:flex-row lg:flex-row gap-8 shrink-0 w-full lg:w-auto">
-                <div className="flex flex-col gap-5">
-                  <div className="flex items-start gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-[#1F6B45]/40 flex items-center justify-center shrink-0 mt-0.5">
-                      <CheckCircle2 size={14} className="text-[#59D66F]" />
-                    </div>
-                    <div>
-                      <p className="text-white text-xs font-semibold">Consultation & Site Survey</p>
-                      <p className="text-gray-400 text-xs">We assess your needs on-site</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-[#1F6B45]/40 flex items-center justify-center shrink-0 mt-0.5">
-                      <CheckCircle2 size={14} className="text-[#59D66F]" />
-                    </div>
-                    <div>
-                      <p className="text-white text-xs font-semibold">Engineering & Solution Design</p>
-                      <p className="text-gray-400 text-xs">Tailored to your operational goals</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="flex flex-col gap-5 justify-center">
-                  <div className="flex items-start gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-[#1F6B45]/40 flex items-center justify-center shrink-0 mt-0.5">
-                      <CheckCircle2 size={14} className="text-[#59D66F]" />
-                    </div>
-                    <div>
-                      <p className="text-white text-xs font-semibold">Support & After-Sales Service</p>
-                      <p className="text-gray-400 text-xs">Reliable support for long-term operations</p>
-                    </div>
-                  </div>
-                </div>
-              </FadeUp>
-
-              <FadeUp delay={180} className="flex flex-col sm:flex-row lg:flex-col gap-3 shrink-0 w-full sm:w-auto">
-                <Link
-                  href="/quote"
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-[#59D66F] text-[#071A14] text-sm font-bold hover:bg-[#4bc45e] transition-colors"
-                >
-                  Request a Quote <ArrowRight size={14} />
-                </Link>
-                <a
-                  href="https://wa.me/6285159775365"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg border border-[#59D66F]/50 text-[#59D66F] text-sm font-bold hover:bg-[#59D66F]/10 transition-colors"
-                >
-                  <MessageCircle size={14} /> Chat on WhatsApp
-                </a>
-              </FadeUp>
-            </div>
-          </div>
-        </div>
-      </section>
+      <CtaBanner
+        heading="Have a Project Requirement to Discuss?"
+        subtext="If you already have a defined scope, technical requirement, or planned upgrade, submit a quote request and our team wil review your project needs."
+        primaryLabel="Request a Quote →"
+      />
 
     </main>
   );

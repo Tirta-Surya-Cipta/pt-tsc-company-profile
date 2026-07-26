@@ -10,6 +10,9 @@ export class ProjectRepository {
     skip?: number;
   }) {
     return prisma.project.findMany({
+      where: {
+        deletedAt: null,
+      },
       orderBy: {
         createdAt: "desc",
       },
@@ -19,14 +22,20 @@ export class ProjectRepository {
   }
 
   async findById(id: string) {
-    return prisma.project.findUnique({
-      where: { id },
+    return prisma.project.findFirst({
+      where: { 
+        id,
+        deletedAt: null,
+      },
     });
   }
 
   async findBySlug(slug: string) {
-    return prisma.project.findUnique({
-      where: { slug },
+    return prisma.project.findFirst({
+      where: { 
+        slug,
+        deletedAt: null,
+      },
     });
   }
 
@@ -44,8 +53,11 @@ export class ProjectRepository {
   }
 
   async delete(id: string) {
-    return prisma.project.delete({
+    return prisma.project.update({
       where: { id },
+      data: {
+        deletedAt: new Date(),
+      },
     });
   }
 }
