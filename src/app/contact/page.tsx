@@ -1,51 +1,38 @@
 "use client";
 
 import * as React from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { contactSchema, ContactInput } from "@/server/validators/contact.validator";
+import { submitQuoteRequest } from "@/actions/inbox";
 import { toast } from "sonner";
-import axios from "axios";
-import { MapPin, Mail, Phone, Clock, Loader2, MessageCircle, ArrowRight, CheckCircle2, Check, HelpCircle, Wrench, Shield, Cpu, Headphones } from "lucide-react";
+import { MapPin, Mail, Phone, Clock, Loader2, MessageCircle, ArrowRight, CheckCircle2, Check, HelpCircle, Wrench, Shield, Cpu, Headphones, AlertCircle } from "lucide-react";
 import Link from "next/link";
 import { FadeUp } from "@/components/shared/FadeUp";
 import CtaBanner from '@/components/shared/CtaBanner';
 
-
 export default function ContactPage() {
   const [submitting, setSubmitting] = React.useState(false);
+  const [status, setStatus] = React.useState<{ success?: boolean; message?: string; error?: string } | null>(null);
 
-  // Extend the form state internally to match mockup fields if needed, 
-  // but we'll bind strictly to the schema for actual submission.
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm<ContactInput>({
-    resolver: zodResolver(contactSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-      company: "",
-      phone: "",
-      subject: "",
-      message: "",
-    },
-  });
-
-  const onSubmit = async (data: ContactInput) => {
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     setSubmitting(true);
+    setStatus(null);
+
+    const formElement = e.currentTarget;
+    const formData = new FormData(formElement);
+
     try {
-      const response = await axios.post("/api/contact", data);
-      if (response.data.success) {
-        toast.success("Lead registered successfully. Our engineers will follow up!");
-        reset();
-      } else {
-        toast.error(response.data.error || "Failed to submit message");
+      const res = await submitQuoteRequest(formData);
+      setStatus(res);
+      if (res.success) {
+        toast.success(res.message || "Pesan berhasil dikirim!");
+        formElement.reset();
+      } else if (res.error) {
+        toast.error(res.error);
       }
-    } catch (error: any) {
-      toast.error(error.response?.data?.error || "Connection error. Please try again.");
+    } catch (err: any) {
+      const errorMsg = err.message || "Terjadi kesalahan koneksi. Silakan coba lagi.";
+      setStatus({ error: errorMsg });
+      toast.error(errorMsg);
     } finally {
       setSubmitting(false);
     }
@@ -180,25 +167,44 @@ export default function ContactPage() {
                   Tell us about your inquiry, project challenge, or support requirement. Our team will review your message and respond through the most relevant contact channel.
                 </p>
 
-                <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+                {/* Indikator UI Success / Error */}
+                {status?.success && (
+                  <div className="mb-6 p-4 rounded-lg bg-green-50 border border-green-200 flex items-center gap-3 text-green-800 text-sm">
+                    <CheckCircle2 className="w-5 h-5 text-green-600 shrink-0" />
+                    <div>
+                      <p className="font-semibold">Success!</p>
+                      <p>{status.message}</p>
+                    </div>
+                  </div>
+                )}
+                {status?.error && (
+                  <div className="mb-6 p-4 rounded-lg bg-red-50 border border-red-200 flex items-center gap-3 text-red-800 text-sm">
+                    <AlertCircle className="w-5 h-5 text-red-600 shrink-0" />
+                    <div>
+                      <p className="font-semibold">Error!</p>
+                      <p>{status.error}</p>
+                    </div>
+                  </div>
+                )}
+
+                <form onSubmit={handleFormSubmit} className="space-y-5">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <div className="space-y-1.5">
                       <label className="text-xs font-bold text-[#1E293B]">Full Name <span className="text-red-500">*</span></label>
                       <input
-                        {...register("name")}
+                        name="fullName"
+                        required
                         className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-[#59D66F] focus:ring-1 focus:ring-[#59D66F]/20 transition-all bg-gray-50/50"
                         placeholder="Enter your full name"
                       />
-                      {errors.name && <p className="text-[11px] text-red-500">{errors.name.message}</p>}
                     </div>
                     <div className="space-y-1.5">
-                      <label className="text-xs font-bold text-[#1E293B]">Company Name <span className="text-red-500">*</span></label>
+                      <label className="text-xs font-bold text-[#1E293B]">Company Name</label>
                       <input
-                        {...register("company")}
+                        name="companyName"
                         className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-[#59D66F] focus:ring-1 focus:ring-[#59D66F]/20 transition-all bg-gray-50/50"
                         placeholder="Enter your company name"
                       />
-                      {errors.company && <p className="text-[11px] text-red-500">{errors.company.message}</p>}
                     </div>
                   </div>
 
@@ -206,46 +212,36 @@ export default function ContactPage() {
                     <div className="space-y-1.5">
                       <label className="text-xs font-bold text-[#1E293B]">Email Address <span className="text-red-500">*</span></label>
                       <input
-                        {...register("email")}
+                        name="email"
                         type="email"
+                        required
                         className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-[#59D66F] focus:ring-1 focus:ring-[#59D66F]/20 transition-all bg-gray-50/50"
                         placeholder="Enter your email address"
                       />
-                      {errors.email && <p className="text-[11px] text-red-500">{errors.email.message}</p>}
                     </div>
                     <div className="space-y-1.5">
-                      <label className="text-xs font-bold text-[#1E293B]">Phone / WhatsApp <span className="text-red-500">*</span></label>
+                      <label className="text-xs font-bold text-[#1E293B]">Phone / WhatsApp</label>
                       <input
-                        {...register("phone")}
+                        name="phone"
                         className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-[#59D66F] focus:ring-1 focus:ring-[#59D66F]/20 transition-all bg-gray-50/50"
                         placeholder="Enter your phone number"
                       />
-                      {errors.phone && <p className="text-[11px] text-red-500">{errors.phone.message}</p>}
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <div className="space-y-1.5">
-                      <label className="text-xs font-bold text-[#1E293B]">Subject <span className="text-red-500">*</span></label>
-                      <input
-                        {...register("subject")}
-                        className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-[#59D66F] focus:ring-1 focus:ring-[#59D66F]/20 transition-all bg-gray-50/50"
-                        placeholder="Enter subject"
-                      />
-                      {errors.subject && <p className="text-[11px] text-red-500">{errors.subject.message}</p>}
-                    </div>
-                    <div className="space-y-1.5">
-                      <label className="text-xs font-bold text-[#1E293B]">Service / Inquiry Type <span className="text-red-500">*</span></label>
+                      <label className="text-xs font-bold text-[#1E293B]">Service / Inquiry Type</label>
                       <select
-                        className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-[#59D66F] focus:ring-1 focus:ring-[#59D66F]/20 transition-all bg-gray-50/50 appearance-none text-[#6B7280]"
-                        defaultValue=""
+                        name="serviceType"
+                        className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-[#59D66F] focus:ring-1 focus:ring-[#59D66F]/20 transition-all bg-gray-50/50 appearance-none text-[#1E293B]"
+                        defaultValue="Automation System"
                       >
-                        <option value="" disabled>Select inquiry type</option>
-                        <option value="automation">Automation System</option>
-                        <option value="panel">Panel Integration</option>
-                        <option value="vsd">Inverter / VSD</option>
-                        <option value="service">Technical Service</option>
-                        <option value="other">Other</option>
+                        <option value="Automation System">Automation System</option>
+                        <option value="Panel Integration">Panel Integration</option>
+                        <option value="Inverter / VSD">Inverter / VSD</option>
+                        <option value="Technical Service">Technical Service</option>
+                        <option value="Lain-lain">Other / Lain-lain</option>
                       </select>
                     </div>
                   </div>
@@ -253,24 +249,24 @@ export default function ContactPage() {
                   <div className="space-y-1.5">
                     <label className="text-xs font-bold text-[#1E293B]">Message / Project Notes <span className="text-red-500">*</span></label>
                     <textarea
-                      {...register("message")}
+                      name="message"
+                      required
                       rows={4}
                       className="w-full px-4 py-3 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-[#59D66F] focus:ring-1 focus:ring-[#59D66F]/20 transition-all bg-gray-50/50 resize-none"
                       placeholder="Please describe your inquiry or project requirement in detail..."
                     ></textarea>
-                    {errors.message && <p className="text-[11px] text-red-500">{errors.message.message}</p>}
                   </div>
 
                   <div className="flex items-center gap-3 pt-2">
-                    <input type="checkbox" id="consent" className="w-4 h-4 rounded border-gray-300 text-[#59D66F] focus:ring-[#59D66F]" />
-                    <label htmlFor="consent" className="text-xs text-[#6B7280]">I agree to be contacted regarding this inquiry</label>
+                    <input type="checkbox" id="contactConsent" name="consent" required className="w-4 h-4 rounded border-gray-300 text-[#59D66F] focus:ring-[#59D66F]" />
+                    <label htmlFor="contactConsent" className="text-xs text-[#6B7280]">I agree to be contacted regarding this inquiry</label>
                   </div>
 
                   <div className="pt-4 flex justify-end">
                     <button
                       type="submit"
                       disabled={submitting}
-                      className="w-full md:w-auto px-8 py-3 bg-[#59D66F] text-[#071A14] font-bold text-sm rounded-lg hover:bg-[#4bc45e] transition-colors flex items-center justify-center gap-2"
+                      className="w-full md:w-auto px-8 py-3 bg-[#59D66F] text-[#071A14] font-bold text-sm rounded-lg hover:bg-[#4bc45e] transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
                     >
                       {submitting && <Loader2 className="w-4 h-4 animate-spin" />}
                       Submit Your Request
