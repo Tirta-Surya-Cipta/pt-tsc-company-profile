@@ -8,30 +8,19 @@ import { Loader2, UploadCloud } from "lucide-react";
 
 export function QuoteForm() {
   const [submitting, setSubmitting] = React.useState(false);
-<<<<<<< Updated upstream
-  const { register, handleSubmit, reset, formState: { errors } } = useForm();
-  const [services, setServices] = React.useState<string[]>([]);
-  
-  const serviceOptions = [
-    "VSD / Inverter System", "PLC & Automation", "Control Panel Integration",
-    "System Integration", "Commissioning", "Technical Support",
-    "Upgrade / Retrofit", "Preventive Maintenance", "Other (please specify)"
-  ];
-=======
   const [status, setStatus] = React.useState<{ success?: boolean; message?: string; error?: string } | null>(null);
   const [fileName, setFileName] = React.useState<string | null>(null);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
->>>>>>> Stashed changes
 
   const handleServiceChange = (service: string) => {
-    setServices(prev => 
+    setServices(prev =>
       prev.includes(service) ? prev.filter(s => s !== service) : [...prev, service]
     );
   };
 
   const onSubmit = async (data: any) => {
     setSubmitting(true);
-    
+
     // Combine extra fields into the message to work with the existing backend
     const combinedMessage = `
 Industry/Facility Type: ${data.industry || 'Not specified'}
@@ -55,15 +44,6 @@ ${data.additionalInfo || 'None provided'}
     };
 
     try {
-<<<<<<< Updated upstream
-      const response = await axios.post("/api/contact", payload);
-      if (response.data.success) {
-        toast.success("Quote request submitted successfully. We will get back to you soon!");
-        reset();
-        setServices([]);
-      } else {
-        toast.error(response.data.error || "Failed to submit quote request");
-=======
       const res = await submitQuoteRequest(formData);
       setStatus(res);
       if (res.success) {
@@ -72,7 +52,6 @@ ${data.additionalInfo || 'None provided'}
         setFileName(null);
       } else if (res.error) {
         toast.error(res.error);
->>>>>>> Stashed changes
       }
     } catch (error: any) {
       toast.error(error.response?.data?.error || "Connection error. Please try again.");
@@ -93,19 +72,19 @@ ${data.additionalInfo || 'None provided'}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <div className="space-y-1.5">
             <label className="text-xs font-bold text-[#1E293B]">Full Name <span className="text-red-500">*</span></label>
-            <input 
-              {...register("name", { required: "Name is required" })} 
-              className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-[#59D66F] focus:ring-1 focus:ring-[#59D66F]/20 transition-all bg-gray-50/50" 
-              placeholder="Enter your full name" 
+            <input
+              {...register("name", { required: "Name is required" })}
+              className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-[#59D66F] focus:ring-1 focus:ring-[#59D66F]/20 transition-all bg-gray-50/50"
+              placeholder="Enter your full name"
             />
             {errors.name && <p className="text-[11px] text-red-500">{errors.name.message as string}</p>}
           </div>
           <div className="space-y-1.5">
             <label className="text-xs font-bold text-[#1E293B]">Company Name <span className="text-red-500">*</span></label>
-            <input 
-              {...register("company", { required: "Company is required" })} 
-              className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-[#59D66F] focus:ring-1 focus:ring-[#59D66F]/20 transition-all bg-gray-50/50" 
-              placeholder="Enter your company name" 
+            <input
+              {...register("company", { required: "Company is required" })}
+              className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-[#59D66F] focus:ring-1 focus:ring-[#59D66F]/20 transition-all bg-gray-50/50"
+              placeholder="Enter your company name"
             />
             {errors.company && <p className="text-[11px] text-red-500">{errors.company.message as string}</p>}
           </div>
@@ -115,20 +94,20 @@ ${data.additionalInfo || 'None provided'}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <div className="space-y-1.5">
             <label className="text-xs font-bold text-[#1E293B]">Email Address <span className="text-red-500">*</span></label>
-            <input 
-              {...register("email", { required: "Email is required", pattern: { value: /\S+@\S+\.\S+/, message: "Invalid email" } })} 
+            <input
+              {...register("email", { required: "Email is required", pattern: { value: /\S+@\S+\.\S+/, message: "Invalid email" } })}
               type="email"
-              className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-[#59D66F] focus:ring-1 focus:ring-[#59D66F]/20 transition-all bg-gray-50/50" 
-              placeholder="Enter your email address" 
+              className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-[#59D66F] focus:ring-1 focus:ring-[#59D66F]/20 transition-all bg-gray-50/50"
+              placeholder="Enter your email address"
             />
             {errors.email && <p className="text-[11px] text-red-500">{errors.email.message as string}</p>}
           </div>
           <div className="space-y-1.5">
             <label className="text-xs font-bold text-[#1E293B]">Phone / WhatsApp <span className="text-red-500">*</span></label>
-            <input 
-              {...register("phone", { required: "Phone number is required" })} 
-              className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-[#59D66F] focus:ring-1 focus:ring-[#59D66F]/20 transition-all bg-gray-50/50" 
-              placeholder="Enter your phone number" 
+            <input
+              {...register("phone", { required: "Phone number is required" })}
+              className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-[#59D66F] focus:ring-1 focus:ring-[#59D66F]/20 transition-all bg-gray-50/50"
+              placeholder="Enter your phone number"
             />
             {errors.phone && <p className="text-[11px] text-red-500">{errors.phone.message as string}</p>}
           </div>
@@ -138,18 +117,18 @@ ${data.additionalInfo || 'None provided'}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <div className="space-y-1.5">
             <label className="text-xs font-bold text-[#1E293B]">Subject <span className="text-red-500">*</span></label>
-            <input 
-              {...register("subject", { required: "Subject is required" })} 
-              className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-[#59D66F] focus:ring-1 focus:ring-[#59D66F]/20 transition-all bg-gray-50/50" 
-              placeholder="Enter subject" 
+            <input
+              {...register("subject", { required: "Subject is required" })}
+              className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-[#59D66F] focus:ring-1 focus:ring-[#59D66F]/20 transition-all bg-gray-50/50"
+              placeholder="Enter subject"
             />
             {errors.subject && <p className="text-[11px] text-red-500">{errors.subject.message as string}</p>}
           </div>
           <div className="space-y-1.5">
             <label className="text-xs font-bold text-[#1E293B]">Industry / Facility Type <span className="text-red-500">*</span></label>
-            <select 
+            <select
               {...register("industry", { required: "Industry is required" })}
-              className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-[#59D66F] focus:ring-1 focus:ring-[#59D66F]/20 transition-all bg-gray-50/50 appearance-none text-[#1E293B]" 
+              className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-[#59D66F] focus:ring-1 focus:ring-[#59D66F]/20 transition-all bg-gray-50/50 appearance-none text-[#1E293B]"
               defaultValue=""
             >
               <option value="" disabled className="text-gray-400">Select inquiry type</option>
@@ -170,11 +149,11 @@ ${data.additionalInfo || 'None provided'}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
             {serviceOptions.map(service => (
               <label key={service} className="flex items-center gap-2 cursor-pointer p-2.5 rounded-lg border border-gray-200 hover:border-[#59D66F]/50 transition-colors bg-white group">
-                <input 
-                  type="checkbox" 
+                <input
+                  type="checkbox"
                   checked={services.includes(service)}
                   onChange={() => handleServiceChange(service)}
-                  className="w-4 h-4 rounded border-gray-300 text-[#59D66F] focus:ring-[#59D66F]" 
+                  className="w-4 h-4 rounded border-gray-300 text-[#59D66F] focus:ring-[#59D66F]"
                 />
                 <span className="text-xs text-[#6B7280] group-hover:text-[#1E293B] transition-colors">{service}</span>
               </label>
@@ -186,18 +165,18 @@ ${data.additionalInfo || 'None provided'}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 pt-2">
           <div className="space-y-1.5">
             <label className="text-xs font-bold text-[#1E293B]">Site Location <span className="text-red-500">*</span></label>
-            <input 
-              {...register("location", { required: "Location is required" })} 
-              className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-[#59D66F] focus:ring-1 focus:ring-[#59D66F]/20 transition-all bg-gray-50/50" 
-              placeholder="City / Area / Province" 
+            <input
+              {...register("location", { required: "Location is required" })}
+              className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-[#59D66F] focus:ring-1 focus:ring-[#59D66F]/20 transition-all bg-gray-50/50"
+              placeholder="City / Area / Province"
             />
             {errors.location && <p className="text-[11px] text-red-500">{errors.location.message as string}</p>}
           </div>
           <div className="space-y-1.5">
             <label className="text-xs font-bold text-[#1E293B]">Target Timeline <span className="text-red-500">*</span></label>
-            <select 
+            <select
               {...register("timeline", { required: "Timeline is required" })}
-              className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-[#59D66F] focus:ring-1 focus:ring-[#59D66F]/20 transition-all bg-gray-50/50 appearance-none text-[#1E293B]" 
+              className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-[#59D66F] focus:ring-1 focus:ring-[#59D66F]/20 transition-all bg-gray-50/50 appearance-none text-[#1E293B]"
               defaultValue=""
             >
               <option value="" disabled className="text-gray-400">Select timeline</option>
@@ -214,9 +193,9 @@ ${data.additionalInfo || 'None provided'}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <div className="space-y-1.5">
             <label className="text-xs font-bold text-[#1E293B]">Estimated Budget Range (Optional)</label>
-            <select 
+            <select
               {...register("budget")}
-              className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-[#59D66F] focus:ring-1 focus:ring-[#59D66F]/20 transition-all bg-gray-50/50 appearance-none text-[#1E293B]" 
+              className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-[#59D66F] focus:ring-1 focus:ring-[#59D66F]/20 transition-all bg-gray-50/50 appearance-none text-[#1E293B]"
               defaultValue=""
             >
               <option value="" disabled className="text-gray-400">Select budget range</option>
@@ -228,9 +207,9 @@ ${data.additionalInfo || 'None provided'}
           </div>
           <div className="space-y-1.5">
             <label className="text-xs font-bold text-[#1E293B]">Preferred Contact Method <span className="text-red-500">*</span></label>
-            <select 
+            <select
               {...register("contactMethod", { required: "Contact method is required" })}
-              className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-[#59D66F] focus:ring-1 focus:ring-[#59D66F]/20 transition-all bg-gray-50/50 appearance-none text-[#1E293B]" 
+              className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-[#59D66F] focus:ring-1 focus:ring-[#59D66F]/20 transition-all bg-gray-50/50 appearance-none text-[#1E293B]"
               defaultValue=""
             >
               <option value="" disabled className="text-gray-400">Select preferred contact method</option>
@@ -245,7 +224,7 @@ ${data.additionalInfo || 'None provided'}
         {/* Additional Info */}
         <div className="space-y-1.5 pt-2">
           <label className="text-xs font-bold text-[#1E293B]">Additional Information (Optional)</label>
-          <textarea 
+          <textarea
             {...register("additionalInfo")}
             rows={4}
             className="w-full px-4 py-3 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-[#59D66F] focus:ring-1 focus:ring-[#59D66F]/20 transition-all bg-gray-50/50 resize-none"
@@ -270,7 +249,7 @@ ${data.additionalInfo || 'None provided'}
               }
             }}
           />
-          <div 
+          <div
             onClick={() => fileInputRef.current?.click()}
             className="w-full border-2 border-dashed border-gray-200 rounded-lg p-6 flex flex-col items-center justify-center bg-gray-50/50 hover:bg-gray-50 transition-colors cursor-pointer group"
           >
@@ -285,11 +264,11 @@ ${data.additionalInfo || 'None provided'}
         {/* Consent & Submit */}
         <div className="pt-4 border-t border-gray-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="flex items-start gap-3 flex-1">
-            <input 
-              type="checkbox" 
-              id="consent" 
+            <input
+              type="checkbox"
+              id="consent"
               {...register("consent", { required: "You must agree to be contacted" })}
-              className="w-4 h-4 rounded border-gray-300 text-[#59D66F] focus:ring-[#59D66F] mt-0.5" 
+              className="w-4 h-4 rounded border-gray-300 text-[#59D66F] focus:ring-[#59D66F] mt-0.5"
             />
             <div>
               <label htmlFor="consent" className="text-xs text-[#6B7280]">I agree to be contacted regarding this inquiry.</label>
@@ -298,9 +277,9 @@ ${data.additionalInfo || 'None provided'}
             </div>
           </div>
 
-          <button 
-            type="submit" 
-            disabled={submitting} 
+          <button
+            type="submit"
+            disabled={submitting}
             className="w-full sm:w-auto px-8 py-3 bg-[#59D66F] text-[#071A14] font-bold text-sm rounded-lg hover:bg-[#4bc45e] transition-colors flex items-center justify-center gap-2 shrink-0"
           >
             {submitting && <Loader2 className="w-4 h-4 animate-spin" />}
