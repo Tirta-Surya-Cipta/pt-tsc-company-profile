@@ -1,50 +1,39 @@
 import type {
     User,
-    Service,
     Project,
-    ProjectImage,
-    ApplicationArea,
     Partner,
-    Document,
     ContactMessage,
-    Settings,
-    Role,
-    MessageStatus,
+    QuoteRequest,
 } from '@prisma/client';
 
 // ─── Re-export Prisma types ───────────────────────────────────────────────────
 export type {
     User,
-    Service,
     Project,
-    ProjectImage,
-    ApplicationArea,
     Partner,
-    Document,
     ContactMessage,
-    Settings,
-    Role,
-    MessageStatus,
+    QuoteRequest,
+};
+
+// ─── Unified Messages ─────────────────────────────────────────────────────────
+export type MessageType = "CONTACT" | "QUOTE";
+
+export type AdminMessage = {
+    id: string;
+    type: MessageType;
+    fullName: string;
+    companyName: string;
+    email: string;
+    phone: string;
+    subject: string;
+    serviceType?: string;
+    message: string;
+    createdAt: Date;
 };
 
 // ─── Extended types (with relations) ─────────────────────────────────────────
+// (Removed types dependent on non-existent Prisma models)
 
-export type ProjectWithRelations = Project & {
-    images: ProjectImage[];
-    service: Service | null;
-    applicationAreas: ApplicationArea[];
-};
-
-export type ProjectWithThumbnail = Project & {
-    images: ProjectImage[];
-    service: Service | null;
-    applicationAreas: ApplicationArea[];
-    thumbnail: ProjectImage | null; // featured image
-};
-
-export type ServiceWithProjects = Service & {
-    projects: Project[];
-};
 
 // ─── Server Action Response ───────────────────────────────────────────────────
 

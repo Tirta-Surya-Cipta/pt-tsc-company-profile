@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { verify } from "jsonwebtoken";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
+import { messageService } from "@/server/services/message.service";
 import {
   FolderOpen,
   Users,
@@ -32,6 +33,8 @@ async function getAdminUser() {
   }
 }
 
+export const dynamic = "force-dynamic";
+
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export default async function AdminDashboardPage() {
   const user = await getAdminUser();
@@ -41,28 +44,30 @@ export default async function AdminDashboardPage() {
   }
 
   // Tarik data dari DB
-  const [projects, contacts, partners] = await Promise.all([
+  const [projects, messages, partners] = await Promise.all([
     prisma.project.findMany({
+      where: { deletedAt: null },
       orderBy: { createdAt: "desc" },
       take: 5,
     }),
-    prisma.contactMessage.findMany({
-      orderBy: { createdAt: "desc" },
-      take: 5,
-    }),
+    messageService.getAllMessages(),
     prisma.partner.count(),
   ]);
 
-  const totalProjects = await prisma.project.count();
-  const totalContacts = await prisma.contactMessage.count();
+  const recentMessages = messages.slice(0, 5);
+
+  const totalProjects = await prisma.project.count({
+    where: { deletedAt: null },
+  });
   
-  // FIX 1: Hapus fitur unreadContacts karena di DB gak ada kolom status
-  const unreadContacts = 0; 
+  const totalContacts = await prisma.contactMessage.count();
+  const totalQuotes = await prisma.quoteRequest.count();
+  const totalMessagesCount = totalContacts + totalQuotes;
 
   const stats = [
     { label: "Total Projects", value: totalProjects, icon: FolderOpen, color: "text-[#1F6B45]", bg: "bg-[#DDE9E2]", href: "/admin/projects" },
     { label: "Partners", value: partners, icon: Users, color: "text-blue-600", bg: "bg-blue-50", href: "/admin/partners" },
-    { label: "Total Messages", value: totalContacts, icon: MessageSquare, color: "text-amber-600", bg: "bg-amber-50", href: "/admin/contacts" },
+    { label: "Total Messages", value: totalMessagesCount, icon: MessageSquare, color: "text-amber-600", bg: "bg-amber-50", href: "/admin/messages", subtext: `${totalContacts} Contact • ${totalQuotes} Quote` },
   ];
 
   return (
@@ -94,7 +99,7 @@ export default async function AdminDashboardPage() {
 
         {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-          {stats.map(({ label, value, icon: Icon, color, bg, href }) => (
+          {stats.map(({ label, value, icon: Icon, color, bg, href, subtext }) => (
             <Link key={label} href={href} className="bg-white rounded-xl border border-gray-100 p-5 hover:shadow-md hover:border-[#59D66F]/30 transition-all">
               <div className="flex items-center justify-between mb-3">
                 <div className={`w-9 h-9 rounded-lg ${bg} flex items-center justify-center`}>
@@ -103,7 +108,8 @@ export default async function AdminDashboardPage() {
                 <ArrowRight size={14} className="text-gray-300" />
               </div>
               <p className="text-[#1E293B] text-2xl font-bold">{value}</p>
-              <p className="text-[#6B7280] text-xs mt-0.5">{label}</p>
+              <p className="text-gray-500 text-xs mt-1">{label}</p>
+              {subtext && <p className="text-[#1F6B45] bg-[#DDE9E2]/50 inline-block px-2 py-0.5 rounded text-[10px] mt-2 font-bold">{subtext}</p>}
             </Link>
           ))}
         </div>
@@ -116,7 +122,7 @@ export default async function AdminDashboardPage() {
           <Link href="/admin/partners/new" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-white border border-gray-200 text-[#1E293B] text-sm font-semibold hover:border-[#59D66F]/40 transition-colors">
             <Plus size={15} /> Add Partner
           </Link>
-          <Link href="/admin/contacts" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-white border border-gray-200 text-[#1E293B] text-sm font-semibold hover:border-[#59D66F]/40 transition-colors">
+          <Link href="/admin/messages" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-white border border-gray-200 text-[#1E293B] text-sm font-semibold hover:border-[#59D66F]/40 transition-colors">
             <MessageSquare size={15} /> View Messages
           </Link>
         </div>
@@ -162,31 +168,32 @@ export default async function AdminDashboardPage() {
           <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
             <div className="flex items-center justify-between px-5 py-4 border-b border-gray-50">
               <h2 className="text-[#1E293B] font-bold text-sm">Recent Messages</h2>
-              <Link href="/admin/contacts" className="text-[#1F6B45] text-xs font-semibold hover:underline">
+              <Link href="/admin/messages" className="text-[#1F6B45] text-xs font-semibold hover:underline">
                 View all
               </Link>
             </div>
-            {contacts.length === 0 ? (
+            {recentMessages.length === 0 ? (
               <div className="px-5 py-10 text-center text-[#6B7280] text-sm">
                 No messages yet.
               </div>
             ) : (
               <ul className="divide-y divide-gray-50">
-                {contacts.map((msg: any) => (
+                {recentMessages.map((msg: any) => (
                   <li key={msg.id}>
-                    <Link href={`/admin/contacts/${msg.id}`} className="flex items-start gap-3 px-5 py-3.5 hover:bg-gray-50 transition-colors">
+                    <Link href={`/admin/messages/${msg.type.toLowerCase()}/${msg.id}`} className="flex items-start gap-3 px-5 py-3.5 hover:bg-gray-50 transition-colors">
                       <div className="w-8 h-8 rounded-full bg-[#DDE9E2] flex items-center justify-center shrink-0 mt-0.5">
                         <span className="text-[#1F6B45] text-xs font-bold">
-                          {/* FIX 2: Ganti msg.name jadi msg.fullName */}
                           {msg.fullName ? msg.fullName.charAt(0).toUpperCase() : "?"}
                         </span>
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">
-                          {/* FIX 3: Sesuaikan pemanggilan data */}
                           <p className="text-[#1E293B] text-sm font-semibold truncate">{msg.fullName}</p>
+                          <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${msg.type === 'CONTACT' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'}`}>
+                            {msg.type}
+                          </span>
                         </div>
-                        <p className="text-[#6B7280] text-xs truncate">{msg.subject ?? msg.message}</p>
+                        <p className="text-[#6B7280] text-xs truncate">{msg.subject}</p>
                         <p className="text-gray-400 text-[10px] mt-0.5 flex items-center gap-1">
                           <Clock size={10} />
                           {new Date(msg.createdAt).toLocaleDateString("id-ID", {

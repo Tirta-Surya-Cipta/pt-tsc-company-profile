@@ -1,6 +1,7 @@
 "use server";
 
-import { uploadImage } from "@/lib/cloudinary";
+import { uploadImageToCloudinary } from "@/lib/cloudinary";
+import { verifyAdmin } from "@/server/auth/verify-admin";
 
 export async function uploadImageAction(formData: FormData): Promise<{
     success: boolean;
@@ -9,6 +10,8 @@ export async function uploadImageAction(formData: FormData): Promise<{
     error?: string;
 }> {
     try {
+        await verifyAdmin();
+
         const file = formData.get("file") as File;
 
         if (!file || file.size === 0) {
@@ -30,10 +33,10 @@ export async function uploadImageAction(formData: FormData): Promise<{
         const bytes = await file.arrayBuffer();
         const buffer = Buffer.from(bytes);
 
-        // Upload ke Cloudinary — auto convert ke webp
-        const result = await uploadImage(buffer, "projects");
+        // Upload ke Cloudinary
+        const url = await uploadImageToCloudinary(buffer, "projects");
 
-        return { success: true, url: result.url, publicId: result.publicId };
+        return { success: true, url };
     } catch (error: any) {
         console.error("Upload error:", error);
         return { success: false, error: error.message || "Upload failed" };

@@ -4,9 +4,12 @@ import { projectSchema } from "@/lib/validations/project";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { uploadImageToCloudinary } from "@/lib/cloudinary";
+import { verifyAdmin } from "@/server/auth/verify-admin";
 
 export async function createProject(formData: FormData) {
   try {
+    await verifyAdmin();
+    
     // Extract thumbnail
     const thumbnailFile = formData.get("thumbnailFile") as File | null;
     let thumbnailUrl = "";
@@ -105,6 +108,7 @@ export async function getProjectBySlug(slug: string) {
 
 export async function updateProject(id: string, data: any) {
   try {
+    await verifyAdmin();
     await prisma.project.update({
       where: { id },
       data,
@@ -120,6 +124,7 @@ export async function updateProject(id: string, data: any) {
 
 export async function deleteProject(id: string) {
   try {
+    await verifyAdmin();
     await prisma.project.update({
       where: { id },
       data: {

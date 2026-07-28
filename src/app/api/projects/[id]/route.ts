@@ -1,11 +1,14 @@
 import { NextResponse } from "next/server";
 import { projectService } from "@/server/services/project.service";
+import { verifyAdmin } from "@/server/auth/verify-admin";
 
 export async function PUT(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    await verifyAdmin();
+
     const { id } = await params;
     const body = await request.json();
 
@@ -35,6 +38,8 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    await verifyAdmin();
+
     const { id } = await params;
 
     await projectService.deleteProject(id);

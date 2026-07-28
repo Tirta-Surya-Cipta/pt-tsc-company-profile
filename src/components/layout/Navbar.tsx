@@ -30,7 +30,7 @@ export default function Navbar() {
 
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 shrink-0">
-          <Image src="/images/logo-tsc.png" alt="TSC" width={120} height={48} className="object-contain" />
+          <Image src="/images/logo-navbar.webp" alt="TSC" width={120} height={48} className="object-contain" />
         </Link>
 
         {/* Desktop nav */}

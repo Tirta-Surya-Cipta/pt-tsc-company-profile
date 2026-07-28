@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { projectService } from "@/server/services/project.service";
+import { verifyAdmin } from "@/server/auth/verify-admin";
 
 /**
  * Route handler for /api/projects
@@ -29,6 +30,8 @@ export async function GET(request: Request) {
 // POST /api/projects
 export async function POST(request: Request) {
   try {
+    await verifyAdmin();
+
     const body = await request.json();
     const newProject = await projectService.createProject(body);
 

@@ -8,6 +8,7 @@ import { Loader2, UploadCloud } from "lucide-react";
 
 export function QuoteForm() {
   const [submitting, setSubmitting] = React.useState(false);
+<<<<<<< Updated upstream
   const { register, handleSubmit, reset, formState: { errors } } = useForm();
   const [services, setServices] = React.useState<string[]>([]);
   
@@ -16,6 +17,11 @@ export function QuoteForm() {
     "System Integration", "Commissioning", "Technical Support",
     "Upgrade / Retrofit", "Preventive Maintenance", "Other (please specify)"
   ];
+=======
+  const [status, setStatus] = React.useState<{ success?: boolean; message?: string; error?: string } | null>(null);
+  const [fileName, setFileName] = React.useState<string | null>(null);
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
+>>>>>>> Stashed changes
 
   const handleServiceChange = (service: string) => {
     setServices(prev => 
@@ -49,6 +55,7 @@ ${data.additionalInfo || 'None provided'}
     };
 
     try {
+<<<<<<< Updated upstream
       const response = await axios.post("/api/contact", payload);
       if (response.data.success) {
         toast.success("Quote request submitted successfully. We will get back to you soon!");
@@ -56,6 +63,16 @@ ${data.additionalInfo || 'None provided'}
         setServices([]);
       } else {
         toast.error(response.data.error || "Failed to submit quote request");
+=======
+      const res = await submitQuoteRequest(formData);
+      setStatus(res);
+      if (res.success) {
+        toast.success(res.message || "Quote request submitted successfully!");
+        formElement.reset();
+        setFileName(null);
+      } else if (res.error) {
+        toast.error(res.error);
+>>>>>>> Stashed changes
       }
     } catch (error: any) {
       toast.error(error.response?.data?.error || "Connection error. Please try again.");
@@ -239,9 +256,28 @@ ${data.additionalInfo || 'None provided'}
         {/* File Upload UI */}
         <div className="space-y-1.5">
           <label className="text-xs font-bold text-[#1E293B]">Upload Files (Optional)</label>
-          <div className="w-full border-2 border-dashed border-gray-200 rounded-lg p-6 flex flex-col items-center justify-center bg-gray-50/50 hover:bg-gray-50 transition-colors cursor-pointer group">
+          <input
+            type="file"
+            name="attachment"
+            ref={fileInputRef}
+            className="hidden"
+            accept=".pdf,.dwg,.jpg,.jpeg,.png,.webp"
+            onChange={(e) => {
+              if (e.target.files && e.target.files.length > 0) {
+                setFileName(e.target.files[0].name);
+              } else {
+                setFileName(null);
+              }
+            }}
+          />
+          <div 
+            onClick={() => fileInputRef.current?.click()}
+            className="w-full border-2 border-dashed border-gray-200 rounded-lg p-6 flex flex-col items-center justify-center bg-gray-50/50 hover:bg-gray-50 transition-colors cursor-pointer group"
+          >
             <UploadCloud size={28} className="text-[#59D66F] mb-3 group-hover:-translate-y-1 transition-transform" />
-            <p className="text-sm font-semibold text-[#1E293B] mb-1">Click to upload or drag & drop</p>
+            <p className="text-sm font-semibold text-[#1E293B] mb-1">
+              {fileName ? fileName : "Click to upload or drag & drop"}
+            </p>
             <p className="text-xs text-gray-500">PDF, DWG, JPG, PNG (Max 10MB per file)</p>
           </div>
         </div>

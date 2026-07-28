@@ -2,6 +2,20 @@
 
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
+<<<<<<< Updated upstream
+=======
+import nodemailer from "nodemailer";
+import { uploadImageToCloudinary } from "@/lib/cloudinary";
+
+// Konfigurasi transporter Email (Gunakan SMTP / Gmail App Password)
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER, // Set di file .env lu
+    pass: process.env.EMAIL_PASS, // Set di file .env lu
+  },
+});
+>>>>>>> Stashed changes
 
 export async function submitQuoteRequest(formData: FormData) {
   try {
@@ -15,7 +29,27 @@ export async function submitQuoteRequest(formData: FormData) {
     
     // UBAH DISINI: Gabungkan serviceType dan message ke dalam projectScope
     const serviceType = (formData.get("serviceType") as string) || "Lain-lain";
-    const projectScope = `Layanan: ${serviceType}\n\nDetail:\n${message}`;
+    let projectScope = `Layanan: ${serviceType}\n\nDetail:\n${message}`;
+
+    // Handle File Attachment
+    const attachment = formData.get("attachment") as File | null;
+    let attachmentUrl = "";
+
+    if (attachment && attachment.size > 0) {
+      if (attachment.size > 10 * 1024 * 1024) {
+        return { error: "File terlalu besar. Maksimal 10MB." };
+      }
+      try {
+        const bytes = await attachment.arrayBuffer();
+        const buffer = Buffer.from(bytes);
+        attachmentUrl = await uploadImageToCloudinary(buffer, "quotes", "auto");
+        projectScope += `\n\n[Attachment]: ${attachmentUrl}`;
+      } catch (err) {
+        console.error("Failed to upload attachment:", err);
+        // Continue even if upload fails
+        projectScope += `\n\n[Attachment]: Gagal diunggah`;
+      }
+    }
 
     // Validasi manual sederhana
     if (!fullName || !email || !message) {

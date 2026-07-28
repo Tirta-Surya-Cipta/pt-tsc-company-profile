@@ -1,9 +1,13 @@
 "use client";
 
 import * as React from "react";
+<<<<<<< Updated upstream
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { contactSchema, ContactInput } from "@/server/validators/contact.validator";
+=======
+import { sendContactForm } from "@/actions/contact";
+>>>>>>> Stashed changes
 import { toast } from "sonner";
 import axios from "axios";
 import { MapPin, Mail, Phone, Clock, Loader2, MessageCircle, ArrowRight, CheckCircle2, Check, HelpCircle, Wrench, Shield, Cpu, Headphones } from "lucide-react";
@@ -36,6 +40,7 @@ export default function ContactPage() {
 
   const onSubmit = async (data: ContactInput) => {
     setSubmitting(true);
+<<<<<<< Updated upstream
     try {
       const response = await axios.post("/api/contact", data);
       if (response.data.success) {
@@ -43,6 +48,24 @@ export default function ContactPage() {
         reset();
       } else {
         toast.error(response.data.error || "Failed to submit message");
+=======
+    setStatus(null);
+
+    const formElement = e.currentTarget;
+    const formData = new FormData(formElement);
+
+    // Tambahkan subject default jika tidak ada, karena schema membutuhkannya
+    formData.append("subject", "General Inquiry via Contact Form");
+
+    try {
+      const res = await sendContactForm(formData);
+      setStatus(res);
+      if (res.success) {
+        toast.success(res.message || "Pesan berhasil dikirim!");
+        formElement.reset();
+      } else if (res.error) {
+        toast.error(res.error);
+>>>>>>> Stashed changes
       }
     } catch (error: any) {
       toast.error(error.response?.data?.error || "Connection error. Please try again.");

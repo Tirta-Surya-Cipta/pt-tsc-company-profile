@@ -93,7 +93,7 @@ export default function QuotePage() {
               {/* Timeline Info */}
               <FadeUp delay={100} className="bg-[#F7F9F8] rounded-2xl border border-gray-100 p-6 sm:p-8 shadow-sm">
                 <h3 className="font-bold text-[#1E293B] text-base mb-6">What happens next?</h3>
-                <div className="space-y-6 relative before:absolute before:inset-0 before:ml-[15px] before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-[#59D66F] before:to-transparent">
+                <div className="space-y-6 relative before:absolute before:top-0 before:left-[15px] before:h-full before:w-0.5 before:bg-gradient-to-b before:from-[#59D66F] before:to-transparent">
 
                   <div className="relative flex items-start gap-4">
                     <div className="w-8 h-8 rounded-full bg-[#DDE9E2] border border-[#2E8B57]/20 flex items-center justify-center shrink-0 z-10 text-[#1F6B45] text-xs font-bold">01</div>

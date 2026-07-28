@@ -8,11 +8,12 @@ cloudinary.config({
 
 export const uploadImageToCloudinary = async (
   fileBuffer: Buffer,
-  folder: string
+  folder: string,
+  resourceType: "auto" | "image" | "raw" = "auto"
 ): Promise<string> => {
   return new Promise((resolve, reject) => {
     const uploadStream = cloudinary.uploader.upload_stream(
-      { folder },
+      { folder, resource_type: resourceType },
       (error, result) => {
         if (error) return reject(error);
         if (!result) return reject(new Error("No result from Cloudinary"));

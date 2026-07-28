@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { partnerService } from "@/server/services/partner.service";
+import { verifyAdmin } from "@/server/auth/verify-admin";
 
 // GET /api/partners/[id]
 export async function GET(
@@ -34,6 +35,8 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    await verifyAdmin();
+
     const { id } = await params;
     const body = await request.json();
 
@@ -45,6 +48,12 @@ export async function PUT(
       partner: updatedPartner,
     });
   } catch (error: any) {
+    if (error.name === "UnauthorizedError") {
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
+    }
+    if (error.name === "ForbiddenError") {
+      return NextResponse.json({ success: false, error: "Forbidden" }, { status: 403 });
+    }
     if (error.message && error.message.includes("not found")) {
       return NextResponse.json(
         { success: false, error: "Partner not found" },
@@ -64,6 +73,8 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    await verifyAdmin();
+
     const { id } = await params;
 
     await partnerService.deletePartner(id);
@@ -73,6 +84,12 @@ export async function DELETE(
       message: "Partner deleted successfully",
     });
   } catch (error: any) {
+    if (error.name === "UnauthorizedError") {
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
+    }
+    if (error.name === "ForbiddenError") {
+      return NextResponse.json({ success: false, error: "Forbidden" }, { status: 403 });
+    }
     if (error.message && error.message.includes("not found")) {
       return NextResponse.json(
         { success: false, error: "Partner not found" },
