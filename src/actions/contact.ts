@@ -1,6 +1,6 @@
 "use server";
 
-import { contactSchema } from "@/lib/validations/contact";
+import { contactSchema } from "@/server/validators/contact.validator";
 import { prisma } from "@/lib/prisma";
 
 export async function sendContactForm(formData: FormData | any) {

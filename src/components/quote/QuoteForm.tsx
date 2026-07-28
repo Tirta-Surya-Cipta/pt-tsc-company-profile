@@ -3,14 +3,46 @@
 import * as React from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import axios from "axios";
+import { submitQuoteRequest } from "@/actions/inbox";
 import { Loader2, UploadCloud } from "lucide-react";
+
+const serviceOptions = [
+  "PLC / SCADA System",
+  "Panel Manufacturing",
+  "Inverter / VSD",
+  "Commissioning",
+  "Technical Service",
+  "Electrical Installation",
+];
 
 export function QuoteForm() {
   const [submitting, setSubmitting] = React.useState(false);
-  const [status, setStatus] = React.useState<{ success?: boolean; message?: string; error?: string } | null>(null);
   const [fileName, setFileName] = React.useState<string | null>(null);
+  const [services, setServices] = React.useState<string[]>([]);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
+  const formRef = React.useRef<HTMLFormElement>(null);
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      name: "",
+      company: "",
+      email: "",
+      phone: "",
+      subject: "",
+      industry: "",
+      location: "",
+      timeline: "",
+      budget: "",
+      contactMethod: "",
+      additionalInfo: "",
+      consent: false,
+    },
+  });
 
   const handleServiceChange = (service: string) => {
     setServices(prev =>
@@ -21,8 +53,17 @@ export function QuoteForm() {
   const onSubmit = async (data: any) => {
     setSubmitting(true);
 
-    // Combine extra fields into the message to work with the existing backend
+    // Build a FormData to send to the server action (which expects FormData)
+    const formData = new FormData();
+    formData.append("fullName", data.name);
+    formData.append("email", data.email);
+    formData.append("companyName", data.company);
+    formData.append("phone", data.phone);
+    formData.append("serviceType", services.length > 0 ? services.join(", ") : "Not specified");
+
+    // Combine extra fields into the message
     const combinedMessage = `
+Subject: ${data.subject || 'Request for Quote'}
 Industry/Facility Type: ${data.industry || 'Not specified'}
 Services Needed: ${services.length > 0 ? services.join(", ") : 'Not specified'}
 Site Location: ${data.location || 'Not specified'}
@@ -34,27 +75,27 @@ Additional Information:
 ${data.additionalInfo || 'None provided'}
     `.trim();
 
-    const payload = {
-      name: data.name,
-      email: data.email,
-      company: data.company,
-      phone: data.phone,
-      subject: data.subject || "Request for Quote",
-      message: combinedMessage
-    };
+    formData.append("message", combinedMessage);
+
+    // Add file attachment if present
+    const fileInput = fileInputRef.current;
+    if (fileInput?.files && fileInput.files.length > 0) {
+      formData.append("attachment", fileInput.files[0]);
+    }
 
     try {
       const res = await submitQuoteRequest(formData);
-      setStatus(res);
       if (res.success) {
         toast.success(res.message || "Quote request submitted successfully!");
-        formElement.reset();
+        reset();
+        setServices([]);
         setFileName(null);
+        if (fileInputRef.current) fileInputRef.current.value = "";
       } else if (res.error) {
         toast.error(res.error);
       }
     } catch (error: any) {
-      toast.error(error.response?.data?.error || "Connection error. Please try again.");
+      toast.error("Connection error. Please try again.");
     } finally {
       setSubmitting(false);
     }
@@ -67,7 +108,7 @@ ${data.additionalInfo || 'None provided'}
         Please provide as much detail as possible so we can understand your requirements and prepare the best response.
       </p>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      <form ref={formRef} onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {/* Row 1 */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <div className="space-y-1.5">

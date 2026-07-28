@@ -2,8 +2,6 @@
 
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
-<<<<<<< Updated upstream
-=======
 import nodemailer from "nodemailer";
 import { uploadImageToCloudinary } from "@/lib/cloudinary";
 
@@ -11,11 +9,10 @@ import { uploadImageToCloudinary } from "@/lib/cloudinary";
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: process.env.EMAIL_USER, // Set di file .env lu
-    pass: process.env.EMAIL_PASS, // Set di file .env lu
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
   },
 });
->>>>>>> Stashed changes
 
 export async function submitQuoteRequest(formData: FormData) {
   try {

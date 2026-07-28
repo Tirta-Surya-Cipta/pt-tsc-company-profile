@@ -1,15 +1,12 @@
 "use client";
 
 import * as React from "react";
-<<<<<<< Updated upstream
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { contactSchema, ContactInput } from "@/server/validators/contact.validator";
-=======
 import { sendContactForm } from "@/actions/contact";
->>>>>>> Stashed changes
 import { toast } from "sonner";
-import axios from "axios";
+
 import { MapPin, Mail, Phone, Clock, Loader2, MessageCircle, ArrowRight, CheckCircle2, Check, HelpCircle, Wrench, Shield, Cpu, Headphones } from "lucide-react";
 import Link from "next/link";
 import { FadeUp } from "@/components/shared/FadeUp";
@@ -29,9 +26,9 @@ export default function ContactPage() {
   } = useForm<ContactInput>({
     resolver: zodResolver(contactSchema),
     defaultValues: {
-      name: "",
+      fullName: "",
       email: "",
-      company: "",
+      companyName: "",
       phone: "",
       subject: "",
       message: "",
@@ -40,32 +37,14 @@ export default function ContactPage() {
 
   const onSubmit = async (data: ContactInput) => {
     setSubmitting(true);
-<<<<<<< Updated upstream
-    try {
-      const response = await axios.post("/api/contact", data);
-      if (response.data.success) {
-        toast.success("Lead registered successfully. Our engineers will follow up!");
-        reset();
-      } else {
-        toast.error(response.data.error || "Failed to submit message");
-=======
-    setStatus(null);
-
-    const formElement = e.currentTarget;
-    const formData = new FormData(formElement);
-
-    // Tambahkan subject default jika tidak ada, karena schema membutuhkannya
-    formData.append("subject", "General Inquiry via Contact Form");
 
     try {
-      const res = await sendContactForm(formData);
-      setStatus(res);
+      const res = await sendContactForm(data);
       if (res.success) {
         toast.success(res.message || "Pesan berhasil dikirim!");
-        formElement.reset();
+        reset();
       } else if (res.error) {
         toast.error(res.error);
->>>>>>> Stashed changes
       }
     } catch (error: any) {
       toast.error(error.response?.data?.error || "Connection error. Please try again.");
@@ -208,20 +187,20 @@ export default function ContactPage() {
                     <div className="space-y-1.5">
                       <label className="text-xs font-bold text-[#1E293B]">Full Name <span className="text-red-500">*</span></label>
                       <input
-                        {...register("name")}
+                        {...register("fullName")}
                         className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-[#59D66F] focus:ring-1 focus:ring-[#59D66F]/20 transition-all bg-gray-50/50"
                         placeholder="Enter your full name"
                       />
-                      {errors.name && <p className="text-[11px] text-red-500">{errors.name.message}</p>}
+                      {errors.fullName && <p className="text-[11px] text-red-500">{errors.fullName.message}</p>}
                     </div>
                     <div className="space-y-1.5">
                       <label className="text-xs font-bold text-[#1E293B]">Company Name <span className="text-red-500">*</span></label>
                       <input
-                        {...register("company")}
+                        {...register("companyName")}
                         className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-[#59D66F] focus:ring-1 focus:ring-[#59D66F]/20 transition-all bg-gray-50/50"
                         placeholder="Enter your company name"
                       />
-                      {errors.company && <p className="text-[11px] text-red-500">{errors.company.message}</p>}
+                      {errors.companyName && <p className="text-[11px] text-red-500">{errors.companyName.message}</p>}
                     </div>
                   </div>
 
