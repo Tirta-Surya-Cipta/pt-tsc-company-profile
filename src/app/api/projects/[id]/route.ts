@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { projectService } from "@/server/services/project.service";
 import { verifyAdmin } from "@/server/auth/verify-admin";
 
+export const dynamic = "force-dynamic";
+
 export async function PUT(
   request: Request,
   { params }: { params: Promise<{ id: string }> }

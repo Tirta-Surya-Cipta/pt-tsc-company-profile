@@ -22,7 +22,10 @@ async function getAdminUser() {
     
     if (!token) return null;
     
-    const payload = verify(token, process.env.AUTH_SECRET || "rahasia_negara_123") as {
+    const secret = process.env.AUTH_SECRET;
+    if (!secret) return null;
+    
+    const payload = verify(token, secret) as {
       id: string;
       email: string;
       role: string;

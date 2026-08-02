@@ -3,6 +3,8 @@ import { messageService } from "@/server/services/message.service";
 import { MessageType } from "@/types";
 import { verifyAdmin } from "@/server/auth/verify-admin";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(req: NextRequest) {
   try {
     await verifyAdmin();

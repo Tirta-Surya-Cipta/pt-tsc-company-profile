@@ -3,6 +3,8 @@ import { messageService } from "@/server/services/message.service";
 import { MessageType } from "@/types";
 import { verifyAdmin } from "@/server/auth/verify-admin";
 
+export const dynamic = "force-dynamic";
+
 function isValidType(type: string): type is MessageType {
   return type === "CONTACT" || type === "QUOTE";
 }

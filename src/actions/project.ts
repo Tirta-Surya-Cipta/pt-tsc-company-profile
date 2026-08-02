@@ -31,34 +31,30 @@ export async function createProject(formData: FormData) {
       }
     }
 
-    const newProject = await prisma.project.create({
-  data: {
-    title: formData.get("title") as string,
-    slug: formData.get("slug") as string,
-    overview: formData.get("overview") as string,
-    thumbnailImage: thumbnailUrl, // URL dari Cloudinary
-    
-    // Kasih nilai default untuk kolom wajib lainnya biar Prisma gak ngeluarin error 'missing argument'
-    location: (formData.get("location") as string) || "Indonesia",
-    projectYear: parseInt(formData.get("projectYear") as string) || new Date().getFullYear(),
-    industryType: (formData.get("industryType") as string) || "General",
-    applicationType: (formData.get("applicationType") as string) || "Standard",
-    projectType: (formData.get("projectType") as string) || "Industrial",
-    challenge: (formData.get("challenge") as string) || "-",
-    solution: (formData.get("solution") as string) || "-",
-    result: (formData.get("result") as string) || "-",
-    services: (formData.get("services") as string) || "-",
-    highlights: formData.getAll("highlights").map(h => h.toString()),
-    galleryImages: [], // Beri array kosong untuk gallery jika belum di-upload
-  },
-});
+    const rawData = {
+      title: (formData.get("title") as string) || "",
+      slug: (formData.get("slug") as string) || "",
+      overview: (formData.get("overview") as string) || "",
+      location: (formData.get("location") as string) || "Indonesia",
+      projectYear: parseInt(formData.get("projectYear") as string) || new Date().getFullYear(),
+      industryType: (formData.get("industryType") as string) || "General",
+      applicationType: (formData.get("applicationType") as string) || "Standard",
+      projectType: (formData.get("projectType") as string) || "Industrial",
+      services: (formData.get("services") as string) || "General",
+      challenge: (formData.get("challenge") as string) || "-",
+      solution: (formData.get("solution") as string) || "-",
+      result: (formData.get("result") as string) || "-",
+      highlights: formData.getAll("highlights").map((h) => h.toString()),
+      thumbnailImage: thumbnailUrl || "placeholder",
+      galleryImages,
+    };
 
-    const validatedData = projectSchema.safeParse(newProject);
+    const validatedData = projectSchema.safeParse(rawData);
 
     if (!validatedData.success) {
-      return { 
-        error: "Validasi gagal", 
-        details: validatedData.error.flatten().fieldErrors 
+      return {
+        error: "Validasi gagal",
+        details: validatedData.error.flatten().fieldErrors,
       };
     }
 

@@ -38,6 +38,15 @@ export async function POST(req: NextRequest) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
+    // Magic Bytes Verification (Security Fix)
+    const { isValidImageMagicBytes } = await import("@/lib/validations/upload");
+    if (!isValidImageMagicBytes(buffer)) {
+      return NextResponse.json(
+        { success: false, error: "File binary content is not a valid image format" },
+        { status: 400 }
+      );
+    }
+
     // Upload ke Cloudinary — auto convert ke webp
     const url = await uploadImageToCloudinary(buffer, "pt-tsc/projects");
 

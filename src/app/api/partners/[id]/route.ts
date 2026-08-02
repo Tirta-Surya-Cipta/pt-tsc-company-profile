@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { partnerService } from "@/server/services/partner.service";
 import { verifyAdmin } from "@/server/auth/verify-admin";
 
+export const dynamic = "force-dynamic";
+
 // GET /api/partners/[id]
 export async function GET(
   request: Request,

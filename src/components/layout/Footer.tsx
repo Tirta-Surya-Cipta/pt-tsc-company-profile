@@ -102,7 +102,7 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-3 text-sm text-gray-400">
                 <Mail size={15} className="text-[#59D66F] shrink-0" />
-                <a href="mailto:admin@tscindo.net" className="hover:text-white transition-colors">admin@tscindo.net</a>
+                <a href="mailto:admin@tirtasuryacipta.com" className="hover:text-white transition-colors">admin@tirtasuryacipta.com</a>
               </li>
               <li className="flex items-center gap-3 text-sm text-gray-400">
                 <Clock size={15} className="text-[#59D66F] shrink-0" />

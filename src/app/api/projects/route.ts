@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { projectService } from "@/server/services/project.service";
 import { verifyAdmin } from "@/server/auth/verify-admin";
 
+export const dynamic = "force-dynamic";
+
 /**
  * Route handler for /api/projects
  */

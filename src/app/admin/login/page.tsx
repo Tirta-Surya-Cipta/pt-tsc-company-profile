@@ -67,7 +67,7 @@ export default function AdminLoginPage() {
               <Input
                 {...register("email")}
                 type="email"
-                placeholder="admin@tirtasuryacipta.com"
+                placeholder="Email Address"
                 autoComplete="email"
               />
               {errors.email && <p className="text-xs text-red-500">{errors.email.message}</p>}
@@ -78,7 +78,7 @@ export default function AdminLoginPage() {
               <Input
                 {...register("password")}
                 type="password"
-                placeholder="••••••••"
+                placeholder="Password"
                 autoComplete="current-password"
               />
               {errors.password && <p className="text-xs text-red-500">{errors.password.message}</p>}

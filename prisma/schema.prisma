@@ -3,8 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 // ------------------------------------------------------
@@ -50,6 +51,8 @@ model Project {
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
   deletedAt       DateTime? // Jika ada isinya, berarti data dihapus (Soft Delete)
+
+  @@index([deletedAt, createdAt])
 }
 
 // ------------------------------------------------------
@@ -62,6 +65,8 @@ model Partner {
   displayOrder Int       @default(0) // Untuk mengatur urutan tampilan logo
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
+
+  @@index([displayOrder])
 }
 
 // ------------------------------------------------------
@@ -77,6 +82,8 @@ model ContactMessage {
   serviceType String?
   message     String    @db.Text
   createdAt   DateTime  @default(now())
+
+  @@index([createdAt])
 }
 
 model QuoteRequest {
@@ -87,4 +94,6 @@ model QuoteRequest {
   phone           String
   projectScope    String    @db.Text // Deskripsi kebutuhan
   createdAt       DateTime  @default(now())
+
+  @@index([createdAt])
 }

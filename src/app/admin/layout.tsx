@@ -19,8 +19,9 @@ export default async function AdminLayout({
     try {
         const cookieStore = await cookies();
         const token = cookieStore.get("admin_token")?.value;
-        if (token) {
-            user = verify(token, process.env.AUTH_SECRET!);
+        const secret = process.env.AUTH_SECRET;
+        if (token && secret) {
+            user = verify(token, secret);
         }
     } catch { }
 

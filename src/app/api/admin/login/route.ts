@@ -8,7 +8,6 @@ export async function POST(req: NextRequest) {
   try {
     const { email, password } = await req.json();
 
-    // Validasi input
     if (!email || !password) {
       return NextResponse.json(
         {
@@ -19,15 +18,21 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Cari user
+    console.log("================================");
+    console.log("LOGIN ATTEMPT");
+    console.log("Email Input :", email);
+    console.log("Password Input :", password);
+
     const user = await prisma.user.findUnique({
       where: {
         email,
       },
     });
 
-    // User tidak ditemukan
+    console.log("User Found :", !!user);
+
     if (!user || !user.password) {
+      console.log("User tidak ditemukan.");
       return NextResponse.json(
         {
           success: false,
@@ -37,13 +42,18 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Cek password
+    console.log("DB Email :", user.email);
+    console.log("DB Hash :", user.password);
+
     const isPasswordValid = await bcrypt.compare(
       password,
       user.password
     );
 
+    console.log("Password Valid :", isPasswordValid);
+
     if (!isPasswordValid) {
+      console.log("Password tidak cocok.");
       return NextResponse.json(
         {
           success: false,
@@ -53,14 +63,12 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Ambil secret
     const secret = process.env.AUTH_SECRET;
 
     if (!secret) {
       throw new Error("AUTH_SECRET belum diatur di .env");
     }
 
-    // Generate JWT
     const token = sign(
       {
         id: user.id,
@@ -73,7 +81,6 @@ export async function POST(req: NextRequest) {
       }
     );
 
-    // Simpan cookie
     const cookieStore = await cookies();
 
     cookieStore.set("admin_token", token, {
@@ -83,6 +90,9 @@ export async function POST(req: NextRequest) {
       path: "/",
       maxAge: 60 * 60 * 24 * 7,
     });
+
+    console.log("Login berhasil.");
+    console.log("================================");
 
     return NextResponse.json({
       success: true,
