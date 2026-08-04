@@ -48,7 +48,7 @@
     "embla-carousel-react": "^8.6.0",
     "framer-motion": "^12.42.2",
     "input-otp": "^1.4.2",
-    "jose": "^6.2.5",
+    "jose": "^6.2.8",
     "jsonwebtoken": "^9.0.3",
     "lucide-react": "^1.23.0",
     "next": "15.5.20",
@@ -84,5 +84,6 @@
     "prisma": "^6.19.3",
     "tailwindcss": "^4",
     "typescript": "^5"
-  }
+  },
+  "packageManager": "pnpm@10.34.5+sha512.a4ee05f2f73658255bd6a89859c065a45c28a57daefae2c893a168ee2b73168c37b91e83e57ea67654ad03f03031746430e8bce38e362e042605fb8abc80192e"
 }
