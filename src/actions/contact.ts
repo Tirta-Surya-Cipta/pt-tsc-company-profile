@@ -15,9 +15,9 @@ export async function sendContactForm(formData: FormData | any) {
     const validatedData = contactSchema.safeParse(data);
 
     if (!validatedData.success) {
-      return { 
-        error: "Validasi gagal", 
-        details: validatedData.error.flatten().fieldErrors 
+      return {
+        error: "Validasi gagal",
+        details: validatedData.error.flatten().fieldErrors
       };
     }
 

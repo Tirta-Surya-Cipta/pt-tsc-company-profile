@@ -1,36 +1,137 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# PT TSC Company Profile
 
-## Getting Started
+Website Company Profile PT Tirta Surya Cipta menggunakan **Next.js Full Stack**.
 
-First, run the development server:
+---
+
+## Tech Stack
+
+- Next.js 15
+- React
+- TypeScript
+- Tailwind CSS
+- Prisma ORM
+- MySQL
+- pnpm
+
+---
+
+# Clone Project
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+git clone https://github.com/<username>/pt-tsc-company-profile.git
+cd pt-tsc-company-profile
+
+pnpm install
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# Pertama Kali 
 
-## Learn More
+Ambil branch terbaru dari GitHub
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+git fetch origin
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Frontend
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+git checkout -b frontend origin/frontend
+```
 
-## Deploy on Vercel
+Backend
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+git checkout -b backend origin/backend
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+> Jalankan command di atas **sekali aja**.
+
+---
+
+# Workflow Frontend
+
+Masuk ke branch frontend
+
+```bash
+git checkout frontend
+```
+
+Update branch
+
+```bash
+git pull origin frontend
+```
+
+Coding...
+
+Commit
+
+```bash
+git add .
+git commit -m "feat: create hero section"
+```
+
+Push
+
+```bash
+git push origin frontend
+```
+
+---
+
+# Workflow Backend
+
+Masuk ke branch backend
+
+```bash
+git checkout backend
+```
+
+Update branch
+
+```bash
+git pull origin backend
+```
+
+Coding...
+
+Commit
+
+```bash
+git add .
+git commit -m "feat: create project API"
+```
+
+Push
+
+```bash
+git push origin backend
+```
+
+---
+
+# Useful Commands
+
+Lihat branch
+
+```bash
+git branch
+```
+
+Lihat status
+
+```bash
+git status
+```
+
+Update branch main
+
+```bash
+git checkout main
+git pull origin main
+```
