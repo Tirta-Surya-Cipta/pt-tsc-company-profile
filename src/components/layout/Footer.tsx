@@ -1,4 +1,7 @@
+'use client';
+
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { MapPin, Phone, Mail, Clock } from 'lucide-react';
 
 const quickLinks = [
@@ -18,6 +21,13 @@ const solutions = [
 ];
 
 export default function Footer() {
+  const pathname = usePathname();
+
+  // Do not render public Footer on admin routes
+  if (pathname.startsWith('/admin')) {
+    return null;
+  }
+
   return (
     <footer className="bg-[#071A14] text-gray-300">
       <div className="max-w-7xl mx-auto px-6 lg:px-12 pt-16 pb-10">
@@ -118,9 +128,9 @@ export default function Footer() {
         <div className="max-w-7xl mx-auto px-6 lg:px-12 py-4 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-gray-500">
           <span>© 2026 PT Tirta Surya Cipta. All rights reserved.</span>
           <div className="flex items-center gap-3">
-            <Link href="/privacy" className="hover:text-gray-300 transition-colors">Privacy Policy</Link>
+            <Link href="/privacy-policy" className="hover:text-gray-300 transition-colors">Privacy Policy</Link>
             <span>|</span>
-            <Link href="/terms" className="hover:text-gray-300 transition-colors">Terms & Condition</Link>
+            <Link href="/terms-and-conditions" className="hover:text-gray-300 transition-colors">Terms & Conditions</Link>
           </div>
         </div>
       </div>

@@ -3,12 +3,49 @@ import { prisma } from "@/lib/prisma";
 import bcrypt from "bcrypt";
 import { sign } from "jsonwebtoken";
 import { cookies } from "next/headers";
+import { loginSchema } from "@/server/validators/auth.validator";
+import {
+  checkRateLimit,
+  getClientIdentifier,
+  RATE_LIMITS,
+} from "@/lib/security";
 
 export async function POST(req: NextRequest) {
   try {
-    const { email, password } = await req.json();
+    // Rate limiting: 5 attempts per 15 minutes per IP
+    const clientIp = getClientIdentifier(req.headers);
+    const rateLimit = checkRateLimit(clientIp, RATE_LIMITS.login);
 
-    if (!email || !password) {
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Terlalu banyak percobaan login. Silakan coba lagi nanti.",
+        },
+        {
+          status: 429,
+          headers: {
+            "Retry-After": String(
+              Math.ceil((rateLimit.resetAt - Date.now()) / 1000)
+            ),
+          },
+        }
+      );
+    }
+
+    // Parse and validate input with Zod
+    let body: unknown;
+    try {
+      body = await req.json();
+    } catch {
+      return NextResponse.json(
+        { success: false, error: "Request body tidak valid." },
+        { status: 400 }
+      );
+    }
+
+    const validation = loginSchema.safeParse(body);
+    if (!validation.success) {
       return NextResponse.json(
         {
           success: false,
@@ -18,21 +55,13 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    console.log("================================");
-    console.log("LOGIN ATTEMPT");
-    console.log("Email Input :", email);
-    console.log("Password Input :", password);
+    const { email, password } = validation.data;
 
     const user = await prisma.user.findUnique({
-      where: {
-        email,
-      },
+      where: { email },
     });
 
-    console.log("User Found :", !!user);
-
     if (!user || !user.password) {
-      console.log("User tidak ditemukan.");
       return NextResponse.json(
         {
           success: false,
@@ -42,18 +71,9 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    console.log("DB Email :", user.email);
-    console.log("DB Hash :", user.password);
-
-    const isPasswordValid = await bcrypt.compare(
-      password,
-      user.password
-    );
-
-    console.log("Password Valid :", isPasswordValid);
+    const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
-      console.log("Password tidak cocok.");
       return NextResponse.json(
         {
           success: false,
@@ -65,8 +85,15 @@ export async function POST(req: NextRequest) {
 
     const secret = process.env.AUTH_SECRET;
 
-    if (!secret) {
-      throw new Error("AUTH_SECRET belum diatur di .env");
+    if (!secret || secret.length < 32) {
+      console.error("[LOGIN] AUTH_SECRET is missing or too short");
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Terjadi kesalahan pada server.",
+        },
+        { status: 500 }
+      );
     }
 
     const token = sign(
@@ -77,7 +104,7 @@ export async function POST(req: NextRequest) {
       },
       secret,
       {
-        expiresIn: "7d",
+        expiresIn: "8h",
       }
     );
 
@@ -88,11 +115,8 @@ export async function POST(req: NextRequest) {
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       path: "/",
-      maxAge: 60 * 60 * 24 * 7,
+      maxAge: 60 * 60 * 8, // 8 hours
     });
-
-    console.log("Login berhasil.");
-    console.log("================================");
 
     return NextResponse.json({
       success: true,
@@ -104,15 +128,12 @@ export async function POST(req: NextRequest) {
       },
     });
   } catch (error) {
-    console.error("[LOGIN_ERROR]", error);
+    console.error("[LOGIN_ERROR]", error instanceof Error ? error.message : "Unknown error");
 
     return NextResponse.json(
       {
         success: false,
-        error:
-          error instanceof Error
-            ? error.message
-            : "Terjadi kesalahan pada server.",
+        error: "Terjadi kesalahan pada server.",
       },
       {
         status: 500,

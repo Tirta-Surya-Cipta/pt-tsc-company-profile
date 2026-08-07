@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { MapPin, BarChart2, Activity, LucideIcon } from 'lucide-react';
+import { MapPin, BarChart2, Activity, LucideIcon, MessageCircle } from 'lucide-react';
 
 type CtaFeature = {
     icon: LucideIcon;
@@ -61,7 +61,7 @@ export default function CtaBanner({
                                 rel="noopener noreferrer"
                                 className="inline-flex items-center justify-center gap-2 px-7 py-3 rounded-lg border border-[#59D66F] bg-transparent text-[#59D66F] text-sm font-bold hover:bg-[#59D66F]/10 transition-colors whitespace-nowrap"
                             >
-                                <img src="https://c.animaapp.com/NrFfujo6/img/ic-baseline-whatsapp.svg" className="w-5 h-5" alt="" aria-hidden />
+                                <MessageCircle size={18} />
                                 Chat on WhatsApp
                             </a>
                         </div>

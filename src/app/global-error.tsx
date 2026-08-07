@@ -23,7 +23,7 @@ export default function GlobalErrorPage({
           </div>
           <h2 className="text-xl font-bold tracking-tight">Root Telemetry Fault</h2>
           <p className="text-sm text-red-400 font-mono bg-black/40 p-4 rounded border border-red-500/10 text-left overflow-auto max-h-40">
-            {error.message || "An unrecoverable system layer error occurred."}
+            An unrecoverable system layer error occurred.
           </p>
           <button
             onClick={reset}

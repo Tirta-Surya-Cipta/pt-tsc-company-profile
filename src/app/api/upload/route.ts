@@ -1,11 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
 import { uploadImageToCloudinary } from "@/lib/cloudinary";
 import { verifyAdmin } from "@/server/auth/verify-admin";
+import { checkRateLimit, getClientIdentifier, RATE_LIMITS } from "@/lib/security";
 
 export async function POST(req: NextRequest) {
   try {
     // Authorization: Admin only
     await verifyAdmin();
+
+    // Rate limiting: 10 uploads per 5 minutes per IP
+    const clientIp = getClientIdentifier(req.headers);
+    const rateLimit = checkRateLimit(clientIp, RATE_LIMITS.upload);
+
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        { success: false, error: "Upload limit exceeded. Please try again later." },
+        { status: 429 }
+      );
+    }
 
     const formData = await req.formData();
     const file = formData.get("file") as File;
@@ -67,7 +79,7 @@ export async function POST(req: NextRequest) {
     }
     console.error("[UPLOAD_ERROR]", error);
     return NextResponse.json(
-      { success: false, error: error.message || "Upload failed" },
+      { success: false, error: "Upload failed" },
       { status: 500 }
     );
   }

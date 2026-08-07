@@ -4,12 +4,14 @@ import { verifyAdmin } from "@/server/auth/verify-admin";
 
 export const dynamic = "force-dynamic";
 
-// GET /api/partners/[id]
+// GET /api/partners/[id] (ADMIN ONLY)
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    await verifyAdmin();
+
     const { id } = await params;
     const partner = await partnerService.getPartnerById(id);
 
@@ -18,14 +20,21 @@ export async function GET(
       partner,
     });
   } catch (error: any) {
+    if (error.name === "UnauthorizedError") {
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
+    }
+    if (error.name === "ForbiddenError") {
+      return NextResponse.json({ success: false, error: "Forbidden" }, { status: 403 });
+    }
     if (error.message && error.message.includes("not found")) {
       return NextResponse.json(
         { success: false, error: "Partner not found" },
         { status: 404 }
       );
     }
+    console.error("[PARTNER_GET_ID_ERROR]", error);
     return NextResponse.json(
-      { success: false, error: error.message || "Failed to fetch partner" },
+      { success: false, error: "Failed to fetch partner" },
       { status: 500 }
     );
   }
@@ -62,8 +71,9 @@ export async function PUT(
         { status: 404 }
       );
     }
+    console.error("[PARTNER_PUT_ERROR]", error);
     return NextResponse.json(
-      { success: false, error: error.message || "Failed to update partner" },
+      { success: false, error: "Failed to update partner" },
       { status: 500 }
     );
   }
@@ -98,8 +108,9 @@ export async function DELETE(
         { status: 404 }
       );
     }
+    console.error("[PARTNER_DELETE_ERROR]", error);
     return NextResponse.json(
-      { success: false, error: error.message || "Failed to delete partner" },
+      { success: false, error: "Failed to delete partner" },
       { status: 500 }
     );
   }

@@ -18,8 +18,9 @@ export async function GET() {
       partners,
     });
   } catch (error: any) {
+    console.error("[PARTNERS_GET_ERROR]", error);
     return NextResponse.json(
-      { success: false, error: error.message || "Failed to fetch partners" },
+      { success: false, error: "Failed to fetch partners" },
       { status: 500 }
     );
   }
@@ -48,8 +49,9 @@ export async function POST(request: Request) {
     if (error.name === "ForbiddenError") {
       return NextResponse.json({ success: false, error: "Forbidden" }, { status: 403 });
     }
+    console.error("[PARTNERS_POST_ERROR]", error);
     return NextResponse.json(
-      { success: false, error: error.message || "Failed to create partner" },
+      { success: false, error: "Failed to create partner" },
       { status: 400 }
     );
   }

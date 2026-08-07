@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/server/db/prisma";
 
 /**
  * Route handler for GET /api/settings
@@ -20,8 +19,9 @@ export async function GET() {
       data: settings,
     });
   } catch (error: any) {
+    console.error("[SETTINGS_GET_ERROR]", error);
     return NextResponse.json(
-      { success: false, error: error.message || "Failed to fetch settings" },
+      { success: false, error: "Failed to fetch settings" },
       { status: 500 }
     );
   }

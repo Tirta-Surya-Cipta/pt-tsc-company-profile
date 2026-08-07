@@ -5,6 +5,10 @@ import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { uploadImageToCloudinary } from "@/lib/cloudinary";
 import { verifyAdmin } from "@/server/auth/verify-admin";
+import { isValidImageMagicBytes } from "@/lib/validations/upload";
+
+const ALLOWED_MIME_TYPES = ["image/jpeg", "image/png", "image/webp", "image/jpg"];
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
 export async function createProject(formData: FormData) {
   try {
@@ -15,7 +19,13 @@ export async function createProject(formData: FormData) {
     let thumbnailUrl = "";
     
     if (thumbnailFile && thumbnailFile.size > 0) {
+      if (!ALLOWED_MIME_TYPES.includes(thumbnailFile.type) || thumbnailFile.size > MAX_FILE_SIZE) {
+        return { error: "File thumbnail tidak valid (harus JPG, PNG, WEBP & maksimal 5MB)" };
+      }
       const buffer = Buffer.from(await thumbnailFile.arrayBuffer());
+      if (!isValidImageMagicBytes(buffer)) {
+        return { error: "Format file binary thumbnail bukan gambar yang valid" };
+      }
       thumbnailUrl = await uploadImageToCloudinary(buffer, "projects/thumbnails");
     }
 
@@ -25,7 +35,13 @@ export async function createProject(formData: FormData) {
     
     for (const file of galleryFiles) {
       if (file.size > 0) {
+        if (!ALLOWED_MIME_TYPES.includes(file.type) || file.size > MAX_FILE_SIZE) {
+          return { error: "Salah satu file galeri tidak valid (harus JPG, PNG, WEBP & maksimal 5MB)" };
+        }
         const buffer = Buffer.from(await file.arrayBuffer());
+        if (!isValidImageMagicBytes(buffer)) {
+          return { error: "Format file binary galeri bukan gambar yang valid" };
+        }
         const url = await uploadImageToCloudinary(buffer, "projects/galleries");
         galleryImages.push(url);
       }
@@ -105,10 +121,20 @@ export async function getProjectBySlug(slug: string) {
 export async function updateProject(id: string, data: any) {
   try {
     await verifyAdmin();
+
+    const validatedData = projectSchema.partial().safeParse(data);
+    if (!validatedData.success) {
+      return {
+        error: "Validasi data update gagal",
+        details: validatedData.error.flatten().fieldErrors,
+      };
+    }
+
     await prisma.project.update({
       where: { id },
-      data,
+      data: validatedData.data,
     });
+
     revalidatePath("/projects");
     revalidatePath("/admin/dashboard");
     return { success: true, message: "Proyek berhasil diperbarui" };
