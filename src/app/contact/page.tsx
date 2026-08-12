@@ -98,10 +98,10 @@ export default function ContactPage() {
               <div>
                 <h3 className="font-bold text-[#1E293B] text-sm mb-1">Workshop / Office</h3>
                 <p className="text-[#6B7280] text-xs leading-relaxed">
-                  Ruko simprug No.B2-15, Sertajaya, Kec. Cikarang Timur, Kab. Bekasi, Jawa Barat, 17530
+                  Jl. Yudistira No.69, Rt.003/Rw.003, Jatiasih, Kec. Jatiasih, Kota Bks, Jawa Barat 17423
                 </p>
                 <a
-                  href="https://maps.google.com/?q=Ruko+simprug+No.B2-15,+Sertajaya,+Kec.+Cikarang+Timur,+Kab.+Bekasi,+Jawa+Barat,+17530"
+                  href="https://maps.app.goo.gl/43776ByPxaYSQcXZ9?g_st=awb"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-[#1F6B45] text-xs font-semibold mt-3 inline-block hover:underline"
@@ -118,9 +118,9 @@ export default function ContactPage() {
               <div>
                 <h3 className="font-bold text-[#1E293B] text-sm mb-1">Official Email</h3>
                 <p className="text-[#6B7280] text-xs leading-relaxed mb-3">
-                  admin@tscindo.net
+                  admin@tirtasuryacipta.com
                 </p>
-                <a href="mailto:admin@tscindo.net" className="text-[#1F6B45] text-xs font-semibold inline-block hover:underline">Send Email →</a>
+                <a href="mailto:admin@tirtasuryacipta.com" className="text-[#1F6B45] text-xs font-semibold inline-block hover:underline">Send Email →</a>
               </div>
             </FadeUp>
 

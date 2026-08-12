@@ -9,7 +9,7 @@ export async function GET() {
     const settings = {
       id: 1,
       companyName: "PT Tirta Surya Cipta",
-      contactEmail: "info@tirtasuryacipta.com",
+      contactEmail: "admin@tirtasuryacipta.com",
       metaTitle: "PT Tirta Surya Cipta - Industrial Automation & System Integration",
       metaDescription: "Specialist in PLC Programming, SCADA Systems, VSD, and Electrical Control Panels.",
     };
