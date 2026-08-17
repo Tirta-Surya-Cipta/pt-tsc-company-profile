@@ -5,80 +5,32 @@ import { QuoteForm } from "@/components/quote/QuoteForm";
 import { QuoteProcess } from "@/components/quote/QuoteProcess";
 import { FileText, Users, Headphones, CheckCircle2, Shield, Settings, Activity, MessageCircle, ArrowRight, Check } from "lucide-react";
 import Link from "next/link";
+import { ContactQuoteHero } from "@/components/shared/ContactQuoteHero";
 
 export default function QuotePage() {
   return (
     <main>
       {/* ══ HERO ══ */}
-      <section className="relative pt-32 pb-20 bg-[#071A14] overflow-hidden">
-        {/* Background elements */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#071A14] via-[#071A14]/80 to-[#071A14]/30 z-10" />
-        <div
-          className="absolute inset-0 bg-cover bg-center opacity-30 mix-blend-luminosity"
-          style={{ backgroundImage: "url('/images/hero-bg.jpg')" }}
-        />
-
-        <div className="relative z-20 max-w-7xl mx-auto px-6 lg:px-12 flex flex-col lg:flex-row gap-12 items-center">
-          <div className="flex-1 text-white">
-            <FadeUp>
-              <p className="text-[#59D66F] text-[11px] font-bold tracking-[0.2em] uppercase mb-4">REQUEST A QUOTE</p>
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.1] mb-6">
-                Tell Us About Your Project We'll Get Back to You with Solution.
-              </h1>
-              <p className="text-gray-300 text-sm sm:text-base leading-relaxed max-w-lg mb-10">
-                Fill in the form below with your project details and requirements. Our engineering team will review your information and respond with the most relevant solution and next steps.
-              </p>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-[#1F6B45]/40 border border-[#2E8B57]/30 flex items-center justify-center shrink-0">
-                    <FileText size={14} className="text-[#59D66F]" />
-                  </div>
-                  <span className="text-xs font-semibold text-white leading-snug">Detailed Engineering<br />Review</span>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-[#1F6B45]/40 border border-[#2E8B57]/30 flex items-center justify-center shrink-0">
-                    <Users size={14} className="text-[#59D66F]" />
-                  </div>
-                  <span className="text-xs font-semibold text-white leading-snug">Practical & Reliable<br />Solutions</span>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-[#1F6B45]/40 border border-[#2E8B57]/30 flex items-center justify-center shrink-0">
-                    <Headphones size={14} className="text-[#59D66F]" />
-                  </div>
-                  <span className="text-xs font-semibold text-white leading-snug">Responsive Follow-<br />up & Support</span>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-[#1F6B45]/40 border border-[#2E8B57]/30 flex items-center justify-center shrink-0">
-                    <Shield size={14} className="text-[#59D66F]" />
-                  </div>
-                  <span className="text-xs font-semibold text-white leading-snug">Long-Term Project<br />Partnership</span>
-                </div>
-              </div>
-            </FadeUp>
-          </div>
-
-          {/* Right Images (Mosaic) */}
-          <div className="flex-1 w-full relative h-[400px]">
-            <FadeUp delay={200} className="w-full h-full">
-              <div className="grid grid-cols-2 grid-rows-2 gap-3 h-full">
-                <div className="col-span-2 row-span-1 rounded-xl overflow-hidden">
-                  <div className="w-full h-full bg-cover bg-center opacity-80" style={{ backgroundImage: "url('/images/about-hero.webp')" }} />
-                </div>
-                <div className="rounded-xl overflow-hidden">
-                  <div className="w-full h-full bg-cover bg-center opacity-80" style={{ backgroundImage: "url('/images/vfd.webp')" }} />
-                </div>
-                <div className="rounded-xl overflow-hidden">
-                  <div className="w-full h-full bg-cover bg-center opacity-80" style={{ backgroundImage: "url('/images/mining.webp')" }} />
-                </div>
-              </div>
-            </FadeUp>
-          </div>
-        </div>
-      </section>
+      <ContactQuoteHero
+        eyebrow="REQUEST A QUOTE"
+        headline={<>Tell Us What<br />You Need.</>}
+        description="Share your project requirements with our team. Whether you need automation, motor control, panel integration, commissioning, or technical support, we'll help you find the right solution."
+        primaryCta={{
+          label: "Start Your Request",
+          href: "#quote-form",
+        }}
+        secondaryCta={{
+          label: "Chat on WhatsApp",
+          href: "https://wa.me/6285159775365",
+          icon: <MessageCircle size={16} />,
+          external: true,
+        }}
+        imageSrc="/images/home-panel.webp"
+        supportingDetails={["Engineering Review", "Practical Solutions", "Responsive Support"]}
+      />
 
       {/* ══ FORM & INFO SECTION ══ */}
-      <section className="py-16 bg-white">
+      <section id="quote-form" className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
           <div className="flex flex-col lg:flex-row gap-10">
 

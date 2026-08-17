@@ -6,6 +6,7 @@ import nodemailer from "nodemailer";
 import { verifyAdmin } from "@/server/auth/verify-admin";
 import { quoteSchema } from "@/server/validators/quote.validator";
 import { escapeHtml, stripHeaderInjection } from "@/lib/security";
+import { uploadFileToCloudinary } from "@/lib/cloudinary";
 
 // Nodemailer Transporter Configuration using custom SMTP host/port from env
 const transporter = nodemailer.createTransport({
@@ -43,7 +44,25 @@ export async function submitQuoteRequest(formData: FormData) {
     const safePhone = phone || "Tidak disebutkan";
     const safeServiceType = serviceType || "Lain-lain";
 
-    const projectScope = `Layanan: ${safeServiceType}\n\nDetail:\n${message}`;
+    // Handle file attachment upload to Cloudinary
+    const file = formData.get("attachment") as File | null;
+    let attachmentUrl = "";
+
+    if (file && file.size > 0) {
+      try {
+        const bytes = await file.arrayBuffer();
+        const buffer = Buffer.from(bytes);
+        attachmentUrl = await uploadFileToCloudinary(buffer, "attachments", "auto");
+      } catch (uploadError) {
+        console.error("Gagal mengunggah lampiran ke Cloudinary:", uploadError);
+        attachmentUrl = "Gagal diunggah";
+      }
+    }
+
+    let projectScope = `Layanan: ${safeServiceType}\n\nDetail:\n${message}`;
+    if (attachmentUrl) {
+      projectScope += `\n\n[Attachment]: ${attachmentUrl}`;
+    }
 
     // 1. Simpan ke Database
     const newQuote = await prisma.quoteRequest.create({

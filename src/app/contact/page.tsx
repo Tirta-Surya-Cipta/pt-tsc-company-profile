@@ -7,6 +7,7 @@ import { MapPin, Mail, Phone, Clock, Loader2, MessageCircle, ArrowRight, CheckCi
 import Link from "next/link";
 import { FadeUp } from "@/components/shared/FadeUp";
 import CtaBanner from '@/components/shared/CtaBanner';
+import { ContactQuoteHero } from "@/components/shared/ContactQuoteHero";
 
 export default function ContactPage() {
   const [submitting, setSubmitting] = React.useState(false);
@@ -41,50 +42,23 @@ export default function ContactPage() {
   return (
     <main>
       {/* ══ HERO ══ */}
-      <section className="relative pt-32 pb-20 bg-[#071A14] overflow-hidden">
-        {/* Background elements */}
-        <div className="absolute top-0 right-0 w-1/2 h-full opacity-10 pointer-events-none bg-gradient-to-l from-[#59D66F] to-transparent" />
-
-        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 flex flex-col lg:flex-row gap-12 items-center">
-          {/* Left Text */}
-          <div className="flex-1 text-white">
-            <FadeUp>
-              <p className="text-[#59D66F] text-[11px] font-bold tracking-[0.2em] uppercase mb-4">CONTACT US</p>
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.1] mb-6">
-                Let’s Discuss Your Industrial Automation Requirements
-              </h1>
-              <p className="text-gray-300 text-sm sm:text-base leading-relaxed max-w-lg mb-8">
-                Talk to our team about automation systems, panel integration, inverter implementation, commissioning support, or technical service requirements. Whether you're planning a new installation or improving an existing system, we're ready to help.
-              </p>
-              <div className="flex flex-wrap gap-4">
-                <Link href="/quote" className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-[#59D66F] text-[#071A14] text-sm font-bold hover:bg-[#4bc45e] transition-colors">
-                  Request a Quote <ArrowRight size={16} />
-                </Link>
-                <a href="https://wa.me/6285159775365" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-[#59D66F]/50 text-[#59D66F] text-sm font-bold hover:bg-[#59D66F]/10 transition-colors">
-                  <MessageCircle size={16} /> Chat on WhatsApp
-                </a>
-              </div>
-            </FadeUp>
-          </div>
-
-          {/* Right Images (Mosaic) */}
-          <div className="flex-1 w-full relative h-[400px]">
-            <FadeUp delay={200} className="w-full h-full">
-              <div className="grid grid-cols-2 grid-rows-2 gap-3 h-full">
-                <div className="col-span-2 row-span-1 rounded-xl overflow-hidden">
-                  <div className="w-full h-full bg-cover bg-center opacity-80" style={{ backgroundImage: "url('/images/about-hero.webp')" }} />
-                </div>
-                <div className="rounded-xl overflow-hidden">
-                  <div className="w-full h-full bg-cover bg-center opacity-80" style={{ backgroundImage: "url('/images/vfd.webp')" }} />
-                </div>
-                <div className="rounded-xl overflow-hidden">
-                  <div className="w-full h-full bg-cover bg-center opacity-80" style={{ backgroundImage: "url('/images/mining.webp')" }} />
-                </div>
-              </div>
-            </FadeUp>
-          </div>
-        </div>
-      </section>
+      <ContactQuoteHero
+        eyebrow="CONTACT US"
+        headline={<>Let&apos;s Build the Right<br />Industrial Solution.</>}
+        description="Tell us what you're building, improving, or solving. Our team can help with automation, motor control, panel integration, commissioning, and technical requirements."
+        primaryCta={{
+          label: "Chat on WhatsApp",
+          href: "https://wa.me/6285159775365",
+          icon: <MessageCircle size={16} />,
+          external: true,
+        }}
+        secondaryCta={{
+          label: "Request a Quote",
+          href: "/quote",
+        }}
+        imageSrc="/images/about-hero.webp"
+        supportingDetails={["Engineering Review", "Practical Solutions", "Responsive Support"]}
+      />
 
       {/* ══ INFO CARDS ══ */}
       <section className="py-12 bg-[#F7F9F8] -mt-10 relative z-20">
