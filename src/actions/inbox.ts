@@ -124,7 +124,7 @@ export async function getInboxMessages() {
       }),
     ]);
 
-    const formattedContacts = contacts.map((c) => ({
+    const formattedContacts = contacts.map((c: any) => ({
       id: c.id,
       type: "CONTACT",
       name: c.fullName,
@@ -133,7 +133,7 @@ export async function getInboxMessages() {
       createdAt: c.createdAt,
     }));
 
-    const formattedQuotes = quotes.map((q) => ({
+    const formattedQuotes = quotes.map((q: any) => ({
       id: q.id,
       type: "QUOTE",
       name: q.fullName,

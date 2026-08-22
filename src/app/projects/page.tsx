@@ -4,6 +4,26 @@ import { ApplicationAreas } from "@/components/projects/ApplicationAreas";
 import { AlertTriangle, Settings, CheckCircle2, ArrowRight } from "lucide-react";
 import CtaBanner from '@/components/shared/CtaBanner';
 
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Industrial Automation Projects | PT Tirta Surya Cipta",
+  description:
+    "Explore our portfolio of industrial automation, control panel integration, VSD implementation, and electrical engineering projects across Indonesia.",
+  alternates: {
+    canonical: "https://www.tirtasuryacipta.com/projects",
+  },
+  openGraph: {
+    title: "Industrial Automation Projects | PT Tirta Surya Cipta",
+    description:
+      "Explore our portfolio of industrial automation, control panel integration, VSD implementation, and electrical engineering projects across Indonesia.",
+    url: "https://www.tirtasuryacipta.com/projects",
+    siteName: "PT Tirta Surya Cipta",
+    locale: "en_US",
+    type: "website",
+  },
+};
+
 export const revalidate = 0;
 
 export default async function ProjectsPage() {
