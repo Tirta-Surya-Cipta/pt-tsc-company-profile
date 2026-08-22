@@ -1,6 +1,6 @@
 "use server";
 
-import { contactSchema } from "@/lib/validations/contact";
+import { contactSchema } from "@/server/validators/contact.validator";
 import { prisma } from "@/lib/prisma";
 
 export async function sendContactForm(formData: FormData | any) {
@@ -15,9 +15,9 @@ export async function sendContactForm(formData: FormData | any) {
     const validatedData = contactSchema.safeParse(data);
 
     if (!validatedData.success) {
-      return { 
-        error: "Validasi gagal", 
-        details: validatedData.error.flatten().fieldErrors 
+      return {
+        error: "Validasi gagal",
+        details: validatedData.error.flatten().fieldErrors
       };
     }
 

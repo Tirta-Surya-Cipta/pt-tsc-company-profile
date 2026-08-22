@@ -6,6 +6,29 @@ import {
   MessageSquare, ArrowRight,
   Wrench, Settings, Headphones, Handshake, Building2,
 } from 'lucide-react';
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "All Projects Portfolio | PT Tirta Surya Cipta",
+  description:
+    "Browse our full listing of completed industrial automation, control panel integration, and electrical engineering projects.",
+  robots: {
+    index: false,
+    follow: true,
+  },
+  alternates: {
+    canonical: "https://www.tirtasuryacipta.com/projects/all",
+  },
+  openGraph: {
+    title: "All Projects Portfolio | PT Tirta Surya Cipta",
+    description:
+      "Browse our full listing of completed industrial automation, control panel integration, and electrical engineering projects.",
+    url: "https://www.tirtasuryacipta.com/projects/all",
+    siteName: "PT Tirta Surya Cipta",
+    locale: "en_US",
+    type: "website",
+  },
+};
 
 export const revalidate = 0;
 

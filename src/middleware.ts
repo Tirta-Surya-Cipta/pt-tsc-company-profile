@@ -1,31 +1,63 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { jwtVerify } from 'jose';
 
-export function middleware(request: NextRequest) {
-  // Ambil token dari cookie yang diset oleh API Login tadi
+/**
+ * Edge-compatible cryptographic JWT verification.
+ * Verifies the token signature using AUTH_SECRET.
+ */
+async function verifyAdminToken(token: string): Promise<boolean> {
+  try {
+    const secret = process.env.AUTH_SECRET;
+    if (!secret || secret.length < 16) return false;
+    
+    const secretKey = new TextEncoder().encode(secret);
+    const { payload } = await jwtVerify(token, secretKey);
+
+    return payload?.role === 'admin';
+  } catch {
+    return false;
+  }
+}
+
+export async function middleware(request: NextRequest) {
   const token = request.cookies.get('admin_token')?.value;
   const { pathname } = request.nextUrl;
 
-  const isAccessingDashboard = pathname.startsWith('/admin/dashboard');
+  const isAccessingAdmin = pathname.startsWith('/admin') && pathname !== '/admin/login';
   const isAccessingLogin = pathname === '/admin/login';
 
-  // Skenario 1: Belum login tapi maksa masuk halaman dashboard -> Lempar ke Login
-  if (isAccessingDashboard && !token) {
+  // Scenario 1: Accessing admin route without token -> Redirect to login
+  if (isAccessingAdmin && !token) {
     const loginUrl = new URL('/admin/login', request.url);
     return NextResponse.redirect(loginUrl);
   }
 
-  // Skenario 2: Sudah login (punya token) tapi malah buka halaman login -> Lempar ke Dashboard
-  if (isAccessingLogin && token) {
-    const dashboardUrl = new URL('/admin/dashboard', request.url);
-    return NextResponse.redirect(dashboardUrl);
+  // Scenario 2: Accessing admin route with token -> Verify signature and role
+  if (isAccessingAdmin && token) {
+    const isValid = await verifyAdminToken(token);
+
+    if (!isValid) {
+      const loginUrl = new URL('/admin/login', request.url);
+      const response = NextResponse.redirect(loginUrl);
+      response.cookies.delete('admin_token');
+      return response;
+    }
   }
 
-  // Lanjutkan perjalanan jika tidak ada masalah
+  // Scenario 3: Already logged in with valid token, accessing login page -> Redirect to dashboard
+  if (isAccessingLogin && token) {
+    const isValid = await verifyAdminToken(token);
+    if (isValid) {
+      const dashboardUrl = new URL('/admin/dashboard', request.url);
+      return NextResponse.redirect(dashboardUrl);
+    }
+  }
+
   return NextResponse.next();
 }
 
-// Konfigurasi: Middleware ini hanya berjaga di rute yang berawalan /admin
 export const config = {
   matcher: ['/admin/:path*'],
 };
+

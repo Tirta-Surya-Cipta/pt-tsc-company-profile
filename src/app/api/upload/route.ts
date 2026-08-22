@@ -1,71 +1,86 @@
-import { NextResponse } from "next/server";
-import path from "path";
-import { mkdir } from "fs/promises";
-import sharp from "sharp";
-import crypto from "crypto";
+import { NextRequest, NextResponse } from "next/server";
+import { uploadImageToCloudinary } from "@/lib/cloudinary";
+import { verifyAdmin } from "@/server/auth/verify-admin";
+import { checkRateLimit, getClientIdentifier, RATE_LIMITS } from "@/lib/security";
 
-export async function POST(request: Request) {
+export async function POST(req: NextRequest) {
   try {
-    const formData = await request.formData();
-    const file = formData.get("file") as File | null;
-    const folder = (formData.get("folder") as string) || "projects";
+    // Authorization: Admin only
+    await verifyAdmin();
 
-    if (!file) {
+    // Rate limiting: 10 uploads per 5 minutes per IP
+    const clientIp = getClientIdentifier(req.headers);
+    const rateLimit = checkRateLimit(clientIp, RATE_LIMITS.upload);
+
+    if (!rateLimit.allowed) {
       return NextResponse.json(
-        { success: false, error: "No file uploaded" },
+        { success: false, error: "Upload limit exceeded. Please try again later." },
+        { status: 429 }
+      );
+    }
+
+    const formData = await req.formData();
+    const file = formData.get("file") as File;
+
+    if (!file || file.size === 0) {
+      return NextResponse.json(
+        { success: false, error: "No file provided" },
         { status: 400 }
       );
     }
 
-    const validTypes = ["image/jpeg", "image/png", "image/webp"];
-    if (!validTypes.includes(file.type)) {
+    // Validasi MIME type
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/jpg"];
+    if (!allowedTypes.includes(file.type)) {
       return NextResponse.json(
-        { success: false, error: "Invalid file type. Only JPG, PNG, and WebP are allowed." },
+        { success: false, error: "Only JPG, PNG, and WEBP are allowed" },
         { status: 400 }
       );
     }
 
+    // Max 5MB
     if (file.size > 5 * 1024 * 1024) {
       return NextResponse.json(
-        { success: false, error: "File size exceeds 5MB limit." },
+        { success: false, error: "File size must be under 5MB" },
         { status: 400 }
       );
     }
 
-    const buffer = Buffer.from(await file.arrayBuffer());
-    
-    // Generate unique filename
-    const uuid = crypto.randomUUID();
-    const filename = `${uuid}.webp`;
-    
-    // Sanitize folder name to prevent path traversal
-    const safeFolder = folder.replace(/[^a-zA-Z0-9_-]/g, "");
-    
-    // Ensure upload directory exists
-    const uploadDir = path.join(process.cwd(), "public", "uploads", safeFolder);
-    await mkdir(uploadDir, { recursive: true });
-    
-    const filePath = path.join(uploadDir, filename);
+    // Convert ke Buffer
+    const bytes = await file.arrayBuffer();
+    const buffer = Buffer.from(bytes);
 
-    // Convert to webp using sharp
-    await sharp(buffer)
-      .webp({ quality: 85 })
-      .toFile(filePath);
+    // Magic Bytes Verification (Security Fix)
+    const { isValidImageMagicBytes } = await import("@/lib/validations/upload");
+    if (!isValidImageMagicBytes(buffer)) {
+      return NextResponse.json(
+        { success: false, error: "File binary content is not a valid image format" },
+        { status: 400 }
+      );
+    }
 
-    const url = `/uploads/${safeFolder}/${filename}`;
+    // Upload ke Cloudinary — auto convert ke webp
+    const url = await uploadImageToCloudinary(buffer, "pt-tsc/projects");
+
+    // Extract filename dari URL
+    const filename = url.split("/").pop() ?? file.name;
 
     return NextResponse.json({
       success: true,
       url,
-      filename
-    }, { status: 201 });
-
+      filename,
+    });
   } catch (error: any) {
-    console.error("Upload error:", error);
+    if (error.name === "UnauthorizedError") {
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
+    }
+    if (error.name === "ForbiddenError") {
+      return NextResponse.json({ success: false, error: "Forbidden" }, { status: 403 });
+    }
+    console.error("[UPLOAD_ERROR]", error);
     return NextResponse.json(
-      { success: false, error: error.message || "Failed to upload file" },
+      { success: false, error: "Upload failed" },
       { status: 500 }
     );
   }
 }
-

@@ -9,7 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@hookform/resolvers": "^5.4.0",
+    "@hookform/resolvers": "^5.5.7",
     "@prisma/client": "^6.19.3",
     "@radix-ui/react-accordion": "^1.2.16",
     "@radix-ui/react-alert-dialog": "^1.1.19",
@@ -48,11 +48,12 @@
     "embla-carousel-react": "^8.6.0",
     "framer-motion": "^12.42.2",
     "input-otp": "^1.4.2",
+    "jose": "^6.2.8",
     "jsonwebtoken": "^9.0.3",
     "lucide-react": "^1.23.0",
     "next": "15.5.20",
     "next-auth": "^4.24.14",
-    "nodemailer": "^9.0.3",
+    "nodemailer": "^7.0.13",
     "react": "19.1.0",
     "react-day-picker": "^10.0.1",
     "react-dom": "19.1.0",
@@ -83,5 +84,6 @@
     "prisma": "^6.19.3",
     "tailwindcss": "^4",
     "typescript": "^5"
-  }
+  },
+  "packageManager": "pnpm@10.34.5+sha512.a4ee05f2f73658255bd6a89859c065a45c28a57daefae2c893a168ee2b73168c37b91e83e57ea67654ad03f03031746430e8bce38e362e042605fb8abc80192e"
 }

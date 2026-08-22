@@ -1,5 +1,7 @@
 import { getInboxMessages } from '@/actions/inbox'; 
 
+export const dynamic = "force-dynamic";
+
 export default async function InboxPage() {
   const messages = await getInboxMessages();
 

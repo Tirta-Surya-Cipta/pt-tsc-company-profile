@@ -1,11 +1,14 @@
 import { NextResponse } from "next/server";
 import { partnerService } from "@/server/services/partner.service";
+import { verifyAdmin } from "@/server/auth/verify-admin";
+
+export const dynamic = "force-dynamic";
 
 /**
  * Route handler for /api/partners
  */
 
-// GET /api/partners
+// GET /api/partners (PUBLIC — used by homepage)
 export async function GET() {
   try {
     const partners = await partnerService.getAllPartners();
@@ -15,16 +18,19 @@ export async function GET() {
       partners,
     });
   } catch (error: any) {
+    console.error("[PARTNERS_GET_ERROR]", error);
     return NextResponse.json(
-      { success: false, error: error.message || "Failed to fetch partners" },
+      { success: false, error: "Failed to fetch partners" },
       { status: 500 }
     );
   }
 }
 
-// POST /api/partners
+// POST /api/partners (ADMIN ONLY)
 export async function POST(request: Request) {
   try {
+    await verifyAdmin();
+
     const body = await request.json();
     const newPartner = await partnerService.createPartner(body);
 
@@ -37,8 +43,15 @@ export async function POST(request: Request) {
       { status: 201 }
     );
   } catch (error: any) {
+    if (error.name === "UnauthorizedError") {
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
+    }
+    if (error.name === "ForbiddenError") {
+      return NextResponse.json({ success: false, error: "Forbidden" }, { status: 403 });
+    }
+    console.error("[PARTNERS_POST_ERROR]", error);
     return NextResponse.json(
-      { success: false, error: error.message || "Failed to create partner" },
+      { success: false, error: "Failed to create partner" },
       { status: 400 }
     );
   }

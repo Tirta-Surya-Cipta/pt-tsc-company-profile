@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/server/db/prisma";
 
 /**
  * Route handler for GET /api/settings
@@ -10,7 +9,7 @@ export async function GET() {
     const settings = {
       id: 1,
       companyName: "PT Tirta Surya Cipta",
-      contactEmail: "info@tirtasuryacipta.com",
+      contactEmail: "admin@tirtasuryacipta.com",
       metaTitle: "PT Tirta Surya Cipta - Industrial Automation & System Integration",
       metaDescription: "Specialist in PLC Programming, SCADA Systems, VSD, and Electrical Control Panels.",
     };
@@ -20,8 +19,9 @@ export async function GET() {
       data: settings,
     });
   } catch (error: any) {
+    console.error("[SETTINGS_GET_ERROR]", error);
     return NextResponse.json(
-      { success: false, error: error.message || "Failed to fetch settings" },
+      { success: false, error: "Failed to fetch settings" },
       { status: 500 }
     );
   }

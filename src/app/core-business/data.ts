@@ -101,14 +101,14 @@ const sharedProcess: ProcessStep[] = [
 // ── Shared Industries ─────────────────────────────────────────────────────────
 
 const sharedIndustries: IndustryCard[] = [
-  { name: "Food & Beverage", description: "Hygienic automation systems", image: "/images/core-business/industries/food-beverage.jpg" },
-  { name: "Water Treatment", description: "Filtration & dosing control", image: "/images/core-business/industries/water-treatment.jpg" },
-  { name: "Manufacturing", description: "Production line automation", image: "/images/core-business/industries/manufacturing.jpg" },
-  { name: "Mining", description: "Heavy-duty motor control", image: "/images/core-business/industries/mining.jpg" },
-  { name: "Palm Oil", description: "Process & utility systems", image: "/images/core-business/industries/palm-oil.jpg" },
-  { name: "Packaging", description: "Speed & precision control", image: "/images/core-business/industries/packaging.jpg" },
-  { name: "Building Utilities", description: "HVAC & pump automation", image: "/images/core-business/industries/building-utilities.jpg" },
-  { name: "Automotive", description: "Precision assembly systems", image: "/images/core-business/industries/automotive.jpg" },
+  { name: "Food & Beverage", description: "Hygienic automation systems", image: "/images/core-business/industries/food-beverage.webp" },
+  { name: "Water Treatment", description: "Filtration & dosing control", image: "/images/core-business/industries/water-treatment.webp" },
+  { name: "Manufacturing", description: "Production line automation", image: "/images/core-business/industries/manufacturing.webp" },
+  { name: "Mining", description: "Heavy-duty motor control", image: "/images/core-business/industries/mining.webp" },
+  { name: "Palm Oil", description: "Process & utility systems", image: "/images/core-business/industries/palm-oil.webp" },
+  { name: "Packaging", description: "Speed & precision control", image: "/images/core-business/industries/packaging.webp" },
+  { name: "Building Utilities", description: "HVAC & pump automation", image: "/images/core-business/industries/building-utilities.webp" },
+  { name: "Automotive", description: "Precision assembly systems", image: "/images/core-business/industries/automotive.webp" },
 ];
 
 // ── Page Data ─────────────────────────────────────────────────────────────────
@@ -123,13 +123,13 @@ export const businessPages: Record<string, CoreBusinessPageData> = {
       badge: "ELECTRICAL CONTROL",
       heading: "Electrical & Control\nSystem Engineering",
       description: "Delivering robust engineering electrical and control flow systems that empower operational reliability, enhance safety, and support long-term efficiency. From control system integration to PLC design and commissioning, TSC offers end-to-end electrical support for industrial requirements.",
-      heroImage: "/images/core-business/electrical-control/hero.jpg",
+      heroImage: "/images/core-business/electrical-control/hero.webp",
     },
     about: {
       title: "Engineering Reliable Electrical Systems for Modern Industries",
       description: "Every industrial operation relies on a well-designed electrical and control system to ensure safety, efficiency, and consistent performance.",
       paragraph: "TSC provides end-to-end engineering services including electrical design, control system, PLC programming, instrumentation, and SCADA integration.\n\nOur engineering approach combines industry best practices with real-world experience to deliver rapid solutions that are easy to operate, maintain, and expand.",
-      image: "/images/core-business/electrical-control/about.jpg",
+      image: "/images/core-business/electrical-control/about.webp",
       features: [
         { icon: Award, title: "Quality Engineering" },
         { icon: Clock, title: "On-Time Delivery" },
@@ -158,7 +158,7 @@ export const businessPages: Record<string, CoreBusinessPageData> = {
     ],
     process: sharedProcess,
     featuredProject: {
-      image: "/images/core-business/electrical-control/featured.jpg",
+      image: "/images/core-business/electrical-control/featured.webp",
       badge: "FEATURED PROJECT",
       title: "Electrical System Engineering for Water Treatment Plant",
       overview: "Complete electrical design and control system engineering for a water treatment facility, including MCC panels, PLC automation, and SCADA integration.",
@@ -184,13 +184,13 @@ export const businessPages: Record<string, CoreBusinessPageData> = {
       badge: "PANEL MANUFACTURING",
       heading: "Panel Manufacturing &\nIntegration",
       description: "Providing professional manufacturing control panels that combine engineering precision, high quality components, and reliable assembly standards. From MCC and PLC Panels to Custom Control Panels, every solution is built for dependable long-term operation.",
-      heroImage: "/images/core-business/panel-manufacturing/hero.jpg",
+      heroImage: "/images/core-business/panel-manufacturing/hero.webp",
     },
     about: {
       title: "Building Reliable Control Panels for Industrial Applications",
       description: "Every automation system starts with a dependable control panel. Our manufacturing process follows strict quality standards, ensuring every panel is tested, documented, and ready for seamless installation.",
       paragraph: "We manufacture custom industrial panels tailored to your operational requirements while maintaining safety, scalability, and maintainability.\n\nFrom design review to factory acceptance testing, our end-to-end process ensures quality at every step.",
-      image: "/images/core-business/panel-manufacturing/about.jpg",
+      image: "/images/core-business/panel-manufacturing/about.webp",
       features: [
         { icon: Award, title: "Quality Engineering" },
         { icon: Factory, title: "Factory Acceptance Testing" },
@@ -219,7 +219,7 @@ export const businessPages: Record<string, CoreBusinessPageData> = {
     ],
     process: sharedProcess,
     featuredProject: {
-      image: "/images/core-business/panel-manufacturing/featured.jpg",
+      image: "/images/core-business/panel-manufacturing/featured.webp",
       badge: "FEATURED PROJECT",
       title: "Custom PLC & MCC Panel Manufacturing for Water Treatment Facility",
       overview: "Designed and manufactured custom PLC and MCC panels for a water treatment plant, including functional testing and complete documentation.",
@@ -245,13 +245,13 @@ export const businessPages: Record<string, CoreBusinessPageData> = {
       badge: "TECHNICAL SERVICE",
       heading: "Technical Service &\nLong-Term Support",
       description: "Maintaining reliable industrial operations requires responsive field support for troubleshooting, emergency response, and long-term service management designed to maximize uptime and minimize equipment disruption.",
-      heroImage: "/images/core-business/technical-service/hero.jpg",
+      heroImage: "/images/core-business/technical-service/hero.webp",
     },
     about: {
       title: "Keeping Your Industrial Systems Running Efficiently",
       description: "Our technical service team provides responsive field support for industrial automation systems, whether it is preventive maintenance, breakdown troubleshooting, or scheduled inspections.",
       paragraph: "We help keep your production operating with minimal interruption.\n\nOur team brings real-world experience across various industries and platforms to quickly diagnose and resolve technical issues.",
-      image: "/images/core-business/technical-service/about.jpg",
+      image: "/images/core-business/technical-service/about.webp",
       features: [
         { icon: Clock, title: "Long-Term Service Support" },
         { icon: Shield, title: "Preventive Maintenance" },
@@ -280,7 +280,7 @@ export const businessPages: Record<string, CoreBusinessPageData> = {
     ],
     process: sharedProcess,
     featuredProject: {
-      image: "/images/core-business/technical-service/featured.jpg",
+      image: "/images/core-business/technical-service/featured.webp",
       badge: "FEATURED PROJECT",
       title: "Annual Maintenance Program for Manufacturing Plant",
       overview: "Provided a comprehensive annual maintenance program for a food manufacturing facility, covering PLC systems, motor drives, and electrical distribution.",
@@ -306,13 +306,13 @@ export const businessPages: Record<string, CoreBusinessPageData> = {
       badge: "COMMISSIONING",
       heading: "Commissioning &\nTroubleShooting",
       description: "Ensuring every installed automation system performs correctly, efficiently, and according to design specifications through professional commissioning, testing, and troubleshooting services.",
-      heroImage: "/images/core-business/commissioning/hero.jpg",
+      heroImage: "/images/core-business/commissioning/hero.webp",
     },
     about: {
       title: "Delivering Reliable System Startups",
       description: "Successful automation projects require proper commissioning. Our engineers perform comprehensive testing, verification, calibration, and documentation to ensure every system performs as intended before handover.",
       paragraph: "From pre-commissioning checks to full system validation, we ensure your investment delivers from day one.\n\nOur structured commissioning methodology minimizes startup risks and ensures consistent results.",
-      image: "/images/core-business/commissioning/about.jpg",
+      image: "/images/core-business/commissioning/about.webp",
       features: [
         { icon: CheckCircle2, title: "System Verification" },
         { icon: Activity, title: "Performance Testing" },
@@ -341,7 +341,7 @@ export const businessPages: Record<string, CoreBusinessPageData> = {
     ],
     process: sharedProcess,
     featuredProject: {
-      image: "/images/core-business/commissioning/featured.jpg",
+      image: "/images/core-business/commissioning/featured.webp",
       badge: "FEATURED PROJECT",
       title: "Complete Commissioning for Industrial Water Pumping Station",
       overview: "Full commissioning support for a water pumping station including PLC testing, VSD commissioning, protection verification, and operational handover.",
@@ -367,13 +367,13 @@ export const businessPages: Record<string, CoreBusinessPageData> = {
       badge: "INVERTER & VSD",
       heading: "Inverter & VSD\nImplementation",
       description: "Improve energy efficiency, motor performance, and process control through properly engineered Variable Speed Drive solutions for industrial applications.",
-      heroImage: "/images/core-business/inverter-vsd/hero.jpg",
+      heroImage: "/images/core-business/inverter-vsd/hero.webp",
     },
     about: {
       title: "Smarter Motor Control with VSD Technology",
       description: "Our engineers implement inverter solutions that optimize motor operation, reduce electrical consumption, minimize mechanical stress, and improve process flexibility.",
       paragraph: "From selection and sizing to integration and commissioning, we deliver complete VSD solutions that maximize return on investment.\n\nOur approach considers the full motor system including cabling, protection, and harmonic management.",
-      image: "/images/core-business/inverter-vsd/about.jpg",
+      image: "/images/core-business/inverter-vsd/about.webp",
       features: [
         { icon: BatteryCharging, title: "Energy Efficiency" },
         { icon: Gauge, title: "Better Motor Control" },
@@ -402,7 +402,7 @@ export const businessPages: Record<string, CoreBusinessPageData> = {
     ],
     process: sharedProcess,
     featuredProject: {
-      image: "/images/core-business/inverter-vsd/featured.jpg",
+      image: "/images/core-business/inverter-vsd/featured.webp",
       badge: "FEATURED PROJECT",
       title: "Booster Pump VSD Upgrade for Commercial Water Supply System",
       overview: "Retrofitted existing constant-speed booster pumps with VSD control to improve water pressure stability and reduce energy consumption.",
@@ -428,13 +428,13 @@ export const businessPages: Record<string, CoreBusinessPageData> = {
       badge: "UPGRADE & RETROFIT",
       heading: "Upgrade, Retrofit &\nOptimization",
       description: "Modernize and optimize your existing industrial systems to improve performance, extend equipment life, enhance safety, and reduce operational costs without full system replacement.",
-      heroImage: "/images/core-business/upgrade-retrofit/hero.jpg",
+      heroImage: "/images/core-business/upgrade-retrofit/hero.webp",
     },
     about: {
       title: "Modernizing Existing Systems for Better Performance",
       description: "Not every improvement requires a complete overhaul. Our upgrade and retrofit services help you maximize the value of existing equipment through targeted modernization.",
       paragraph: "We assess your current systems, identify improvement opportunities, and implement upgrades that deliver measurable performance gains.\n\nFrom obsolete PLC migration to control system upgrades, we ensure minimal disruption during the transition process.",
-      image: "/images/core-business/upgrade-retrofit/about.jpg",
+      image: "/images/core-business/upgrade-retrofit/about.webp",
       features: [
         { icon: RefreshCw, title: "System Modernization" },
         { icon: TrendingUp, title: "Performance Improvement" },
@@ -463,7 +463,7 @@ export const businessPages: Record<string, CoreBusinessPageData> = {
     ],
     process: sharedProcess,
     featuredProject: {
-      image: "/images/core-business/upgrade-retrofit/featured.jpg",
+      image: "/images/core-business/upgrade-retrofit/featured.webp",
       badge: "FEATURED PROJECT",
       title: "PLC and Control System Retrofit for Conveyor Line",
       overview: "Modernized an aging conveyor control system by replacing obsolete PLC and adding VSD control for improved speed regulation and reliability.",

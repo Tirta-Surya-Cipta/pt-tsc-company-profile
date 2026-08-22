@@ -4,6 +4,7 @@ import { projectSchema } from "../validators/project.validator";
 import { projectService } from "../services/project.service";
 import { ActionResponse } from "./auth.action";
 import { revalidatePath } from "next/cache";
+import { verifyAdmin } from "../auth/verify-admin";
 
 /**
  * Server Actions to manage projects inside the admin dashboard
@@ -13,6 +14,16 @@ export async function createProjectAction(
   prevState: any,
   formData: FormData
 ): Promise<ActionResponse<any>> {
+  try {
+    await verifyAdmin();
+  } catch (error: any) {
+    console.error("[CREATE_PROJECT_ACTION_AUTH_ERROR]", error);
+    return {
+      success: false,
+      message: "Unauthorized access",
+    };
+  }
+
   // Simple mapping, in a full client form validation TanStack query or react-hook-form can send JSON
   const rawData = {
     title: formData.get("title") as string,
@@ -48,9 +59,10 @@ export async function createProjectAction(
       data: project,
     };
   } catch (error: any) {
+    console.error("[CREATE_PROJECT_ACTION_ERROR]", error);
     return {
       success: false,
-      message: error.message || "Failed to create project",
+      message: "Failed to create project",
     };
   }
 }
@@ -60,6 +72,16 @@ export async function updateProjectAction(
   prevState: any,
   formData: FormData
 ): Promise<ActionResponse<any>> {
+  try {
+    await verifyAdmin();
+  } catch (error: any) {
+    console.error("[UPDATE_PROJECT_ACTION_AUTH_ERROR]", error);
+    return {
+      success: false,
+      message: "Unauthorized access",
+    };
+  }
+
   const rawData: any = {};
   
   if (formData.has("title")) rawData.title = formData.get("title");
@@ -92,15 +114,17 @@ export async function updateProjectAction(
       data: updated,
     };
   } catch (error: any) {
+    console.error("[UPDATE_PROJECT_ACTION_ERROR]", error);
     return {
       success: false,
-      message: error.message || "Failed to update project",
+      message: "Failed to update project",
     };
   }
 }
 
 export async function deleteProjectAction(id: string): Promise<ActionResponse<any>> {
   try {
+    await verifyAdmin();
     const deleted = await projectService.deleteProject(id);
     revalidatePath("/projects");
     return {
@@ -109,9 +133,10 @@ export async function deleteProjectAction(id: string): Promise<ActionResponse<an
       data: { id: deleted.id },
     };
   } catch (error: any) {
+    console.error("[DELETE_PROJECT_ACTION_ERROR]", error);
     return {
       success: false,
-      message: error.message || "Failed to delete project",
+      message: "Failed to delete project",
     };
   }
 }

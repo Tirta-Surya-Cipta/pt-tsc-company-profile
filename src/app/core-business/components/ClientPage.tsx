@@ -7,7 +7,6 @@ import AboutService from "./AboutService";
 import EngineeringCapabilities from "./EngineeringCapabilities";
 import Industries from "./Industries";
 import ProjectProcess from "./ProjectProcess";
-import FeaturedProject from "./FeaturedProject";
 
 const capabilitiesTitles: Record<string, string> = {
   "electrical-control": "OUR ENGINEERING CAPABILITIES",
@@ -20,7 +19,7 @@ const capabilitiesTitles: Record<string, string> = {
 
 export default function ClientPage({ slug }: { slug: string }) {
   const pageData = businessPages[slug];
-  
+
   if (!pageData) return null;
 
   return (
@@ -28,13 +27,12 @@ export default function ClientPage({ slug }: { slug: string }) {
       <Hero data={pageData.hero} slug={pageData.slug} />
       <BusinessOverview />
       <AboutService data={pageData.about} />
-      <EngineeringCapabilities 
-        capabilities={pageData.capabilities} 
-        sectionTitle={capabilitiesTitles[slug] || "OUR CAPABILITIES"} 
+      <EngineeringCapabilities
+        capabilities={pageData.capabilities}
+        sectionTitle={capabilitiesTitles[slug] || "OUR CAPABILITIES"}
       />
       <Industries industries={pageData.industries} benefits={pageData.benefits} />
       <ProjectProcess steps={pageData.process} />
-      <FeaturedProject data={pageData.featuredProject} />
     </>
   );
 }

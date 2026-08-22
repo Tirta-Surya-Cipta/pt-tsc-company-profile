@@ -4,6 +4,26 @@ import { ApplicationAreas } from "@/components/projects/ApplicationAreas";
 import { AlertTriangle, Settings, CheckCircle2, ArrowRight } from "lucide-react";
 import CtaBanner from '@/components/shared/CtaBanner';
 
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Industrial Automation Projects | PT Tirta Surya Cipta",
+  description:
+    "Explore our portfolio of industrial automation, control panel integration, VSD implementation, and electrical engineering projects across Indonesia.",
+  alternates: {
+    canonical: "https://www.tirtasuryacipta.com/projects",
+  },
+  openGraph: {
+    title: "Industrial Automation Projects | PT Tirta Surya Cipta",
+    description:
+      "Explore our portfolio of industrial automation, control panel integration, VSD implementation, and electrical engineering projects across Indonesia.",
+    url: "https://www.tirtasuryacipta.com/projects",
+    siteName: "PT Tirta Surya Cipta",
+    locale: "en_US",
+    type: "website",
+  },
+};
+
 export const revalidate = 0;
 
 export default async function ProjectsPage() {
@@ -20,35 +40,82 @@ export default async function ProjectsPage() {
   return (
     <main>
       {/* ══ HERO ══ */}
-      <section className="relative pt-32 pb-20 bg-[#071A14] overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-[#071A14] via-[#071A14]/80 to-transparent z-10" />
-        <div
-          className="absolute inset-0 bg-cover bg-center opacity-20 mix-blend-luminosity"
-          style={{ backgroundImage: "url('/images/project-hero.webp')" }}
-        />
+      <section className="relative pt-28 lg:pt-36 bg-[#06100D] overflow-hidden flex flex-col justify-between min-h-[620px] lg:min-h-[720px]">
+        {/* Right-side absolute background image for desktop/tablet */}
+        <div className="absolute right-0 top-0 bottom-0 w-full md:w-[45%] lg:w-[55%] h-full hidden md:block select-none pointer-events-none z-0">
+          <div
+            className="w-full h-full bg-cover bg-center mix-blend-luminosity opacity-40 lg:opacity-50"
+            style={{ backgroundImage: "url('/images/vfd.webp')" }}
+          />
+          <div className="absolute inset-0 bg-[linear-gradient(90deg,#06100D_0%,rgba(6,16,13,0.96)_25%,rgba(6,16,13,0.72)_48%,rgba(6,16,13,0.25)_72%,rgba(6,16,13,0.05)_100%)]" />
+        </div>
 
-        <div className="relative z-20 max-w-7xl mx-auto px-6 lg:px-12 flex flex-col lg:flex-row gap-12 items-center">
-          <div className="flex-1 text-white">
-            <p className="text-[#59D66F] text-[11px] font-bold tracking-[0.2em] uppercase mb-4">OUR PROJECTS & APPLICATION AREAS</p>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.1] mb-6">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 w-full flex-1 flex flex-col justify-center py-12 lg:py-20">
+          <div className="max-w-[660px] md:max-w-[55%] lg:max-w-[50%] flex flex-col justify-center">
+            {/* Eyebrow */}
+            <div className="flex items-center gap-3 mb-4 opacity-0 animate-fade-up" style={{ animationDelay: '100ms' }}>
+              <span className="text-[#86EFA0] text-[12px] sm:text-[13px] font-semibold tracking-[0.15em] uppercase">
+                OUR PROJECTS & APPLICATION AREAS
+              </span>
+              <span className="h-px w-8 bg-[#86EFA0]/40 hidden sm:block" />
+            </div>
+
+            {/* Headline */}
+            <h1 className="text-4xl sm:text-5xl lg:text-[64px] font-semibold leading-[1.0] text-[#F5F7F6] tracking-tight mb-6 opacity-0 animate-fade-up" style={{ animationDelay: '250ms' }}>
               Projects &<br />Application Areas
             </h1>
-            <p className="text-gray-300 text-sm sm:text-base leading-relaxed max-w-lg mb-8 border-l-2 border-[#59D66F] pl-4 py-1">
+
+            {/* Description */}
+            <p className="text-[#A8B3AE] text-base sm:text-[18px] leading-relaxed max-w-[540px] mb-8 opacity-0 animate-fade-up" style={{ animationDelay: '400ms' }}>
               A track record of industrial automation and electrical solutions delivered with a strong engineering approach, practical execution, and reliable performance outcomes.
             </p>
-          </div>
 
-          {/* Image grid — hardcoded static images */}
-          <div className="flex-1 w-full relative h-[400px]">
-            <div className="grid grid-cols-2 grid-rows-2 gap-3 h-full">
-              <div className="row-span-2 rounded-xl overflow-hidden">
-                <div className="w-full h-full bg-cover bg-center opacity-85" style={{ backgroundImage: "url('/images/vfd.webp')" }} />
+            {/* CTA */}
+            <div className="opacity-0 animate-fade-up" style={{ animationDelay: '550ms' }}>
+              <a
+                href="#gallery"
+                className="group inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-[#86EFA0]/20 bg-[#0A1713]/40 text-[#86EFA0] text-sm font-semibold hover:border-[#86EFA0]/50 hover:bg-[#86EFA0]/10 transition-all duration-300"
+              >
+                Explore Our Projects
+                <ArrowRight size={16} className="group-hover:translate-x-1.5 transition-transform duration-300" />
+              </a>
+            </div>
+
+            {/* Mobile Industrial Image Block */}
+            <div className="block md:hidden opacity-0 animate-fade-up mt-8" style={{ animationDelay: '650ms' }}>
+              <div className="w-full h-[220px] rounded-xl overflow-hidden border border-[#86EFA0]/15 relative bg-[#0A1713]">
+                <div
+                  className="absolute inset-0 bg-cover bg-center mix-blend-luminosity opacity-60"
+                  style={{ backgroundImage: "url('/images/vfd.webp')" }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#06100D] via-transparent to-transparent" />
               </div>
-              <div className="rounded-xl overflow-hidden">
-                <div className="w-full h-full bg-cover bg-center opacity-85" style={{ backgroundImage: "url('/images/mining.webp')" }} />
+            </div>
+          </div>
+        </div>
+
+        {/* Statistics bar integrated at the bottom of the hero */}
+        <div className="relative z-10 w-full border-t border-[#86EFA0]/10 bg-[#06100D]/80 backdrop-blur-sm opacity-0 animate-fade-up" style={{ animationDelay: '750ms' }}>
+          <div className="max-w-7xl mx-auto px-6 lg:px-12 py-5 lg:py-6">
+            <div className="grid grid-cols-2 md:flex md:flex-row md:items-center md:justify-between gap-6 md:gap-4">
+              <div className="flex-1 flex flex-col md:flex-row md:items-baseline lg:items-center gap-1 md:gap-2">
+                <span className="text-[#86EFA0] text-2xl lg:text-[28px] font-semibold leading-none">15+</span>
+                <span className="text-[#A8B3AE] text-[11px] lg:text-[12px] font-normal leading-tight">Projects Completed</span>
               </div>
-              <div className="rounded-xl overflow-hidden">
-                <div className="w-full h-full bg-cover bg-center opacity-85" style={{ backgroundImage: "url('/images/pump.webp')" }} />
+              <div className="hidden md:block h-6 w-px bg-[#86EFA0]/15" />
+              <div className="flex-1 flex flex-col md:flex-row md:items-baseline lg:items-center gap-1 md:gap-2">
+                <span className="text-[#86EFA0] text-2xl lg:text-[28px] font-semibold leading-none">10+</span>
+                <span className="text-[#A8B3AE] text-[11px] lg:text-[12px] font-normal leading-tight">Years Experience</span>
+              </div>
+              <div className="hidden md:block h-6 w-px bg-[#86EFA0]/15" />
+              <div className="flex-1 flex flex-col md:flex-row md:items-baseline lg:items-center gap-1 md:gap-2">
+                <span className="text-[#86EFA0] text-2xl lg:text-[28px] font-semibold leading-none">98%</span>
+                <span className="text-[#A8B3AE] text-[11px] lg:text-[12px] font-normal leading-tight">Client Satisfaction</span>
+              </div>
+              <div className="hidden md:block h-6 w-px bg-[#86EFA0]/15" />
+              <div className="flex-1 flex flex-col md:flex-row md:items-baseline lg:items-center gap-1 md:gap-2">
+                <span className="text-[#86EFA0] text-2xl lg:text-[28px] font-semibold leading-none">Multiple</span>
+                <span className="text-[#A8B3AE] text-[11px] lg:text-[12px] font-normal leading-tight">Industries Served</span>
               </div>
             </div>
           </div>
