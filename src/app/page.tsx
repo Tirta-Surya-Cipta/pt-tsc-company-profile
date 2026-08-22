@@ -23,6 +23,9 @@ import {
   AlertTriangle,
   MapPin,
 } from 'lucide-react';
+import { Metadata } from "next";
+
+
 
 // ─── Scroll Animation Hook ───────────────────────────────────────────────────
 function useInView(threshold = 0.12) {
@@ -247,18 +250,18 @@ export default function HomePage() {
               <FadeUp className="p-7 flex flex-col justify-between gap-6">
                 <div>
                   <h2 className="text-[#1E293B] text-xl sm:text-2xl font-bold leading-snug mb-3">
-                    Booster Pump System Upgrade &amp; Automation for Building Utility Water Supply
+                    Booster Pump System Upgrade & Automation
                   </h2>
                   <p className="text-[#6B7280] text-sm leading-relaxed">
-                    A real-world example of how we help our clients improve system reliability, reduce mechanical stress, and enhance energy efficiency through VSD integration.
+                    Upgrade and automation of an existing building water supply system to improve pressure stability, pump reliability, and operational efficiency.
                   </p>
                 </div>
 
                 <div className="grid grid-cols-3 gap-3">
                   {[
-                    { value: '60%', label: 'Starting Current Reduced' },
-                    { value: '15%', label: 'Energy Savings' },
-                    { value: '55kW', label: 'VSD Unit Installed' },
+                    { value: '3 UNIT', label: 'Vertical Multistage Pumps' },
+                    { value: 'AUTO', label: 'Pump Control System' },
+                    { value: 'SS 304', label: 'Piping & Manifold' },
                   ].map(({ value, label }) => (
                     <div key={label} className="bg-[#F7F9F8] rounded-xl p-4 text-center border border-gray-100">
                       <p className="text-[#1F6B45] font-bold text-2xl leading-none mb-1">{value}</p>
@@ -268,7 +271,7 @@ export default function HomePage() {
                 </div>
 
                 <Link
-                  href="/projects"
+                  href="/projects/booster-pump-system-upgrade"
                   className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#1F6B45] border border-[#59D66F] text-white text-sm font-semibold hover:bg-[#59D66F] hover:text-[#1E293B] transition-colors self-start"
                 >
                   View Project Details <ArrowRight size={16} />
@@ -283,7 +286,7 @@ export default function HomePage() {
                   </div>
                   <div>
                     <p className="text-amber-600 text-xs font-bold uppercase tracking-wider mb-1">Challenge</p>
-                    <p className="text-[#1E293B] text-sm leading-relaxed">Existing induction motor experienced high starting current, causing mechanical shock, high load, and frequent failures.</p>
+                    <p className="text-[#1E293B] text-sm leading-relaxed">Existing booster pumps required frequent manual adjustment and provided limited control during changing water demand, affecting pressure stability and operational reliability.</p>
                   </div>
                 </div>
 
@@ -293,7 +296,7 @@ export default function HomePage() {
                   </div>
                   <div>
                     <p className="text-blue-600 text-xs font-bold uppercase tracking-wider mb-1">Solution</p>
-                    <p className="text-[#1E293B] text-sm leading-relaxed">Installed a 55 kW VSD unit with new integration panel and electrical thermal protection system.</p>
+                    <p className="text-[#1E293B] text-sm leading-relaxed">Upgraded the system with a three-pump configuration, stainless steel piping and manifold integration, pressure monitoring, and an automated control panel for pump sequencing and system operation.</p>
                   </div>
                 </div>
 
@@ -304,7 +307,7 @@ export default function HomePage() {
                   <div>
                     <p className="text-[#1F6B45] text-xs font-bold uppercase tracking-wider mb-2">Result</p>
                     <ul className="flex flex-col gap-1.5">
-                      {['Starting current reduced up to 60%', 'Eliminated mechanical shock & failures', '15% energy savings on conveyor system'].map(r => (
+                      {['More stable water pressure', 'Improved pump operation and system reliability', 'Reduced dependence on manual intervention'].map(r => (
                         <li key={r} className="flex items-start gap-2 text-sm text-[#1E293B]">
                           <span className="text-[#59D66F] font-bold shrink-0 mt-0.5">✓</span> {r}
                         </li>
