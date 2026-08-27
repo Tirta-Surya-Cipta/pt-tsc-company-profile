@@ -28,6 +28,7 @@ type ProjectFormData = {
     highlights: string[];
     thumbnailImage: string;
     galleryImages: string[];
+    youtubeUrl: string;
 };
 
 interface ProjectFormProps {
@@ -52,6 +53,7 @@ const defaultFormData: ProjectFormData = {
     highlights: [""],
     thumbnailImage: "",
     galleryImages: [],
+    youtubeUrl: "",
 };
 
 export default function ProjectForm({
@@ -317,6 +319,8 @@ export default function ProjectForm({
 
                 galleryImages:
                     formData.galleryImages,
+
+                youtubeUrl: formData.youtubeUrl.trim(),
             };
 
             const url = isEditMode
@@ -511,6 +515,29 @@ export default function ProjectForm({
                             max="2100"
                             className="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-[#59D66F] focus:ring-2 focus:ring-[#59D66F]/20"
                         />
+
+                    </div>
+
+                    {/* YOUTUBE URL */}
+
+                    <div className="md:col-span-2">
+
+                        <label className="mb-2 block text-sm font-medium text-slate-700">
+                            YouTube Video URL
+                            <span className="ml-1 text-xs font-normal text-slate-400">(optional)</span>
+                        </label>
+
+                        <input
+                            name="youtubeUrl"
+                            value={formData.youtubeUrl}
+                            onChange={handleChange}
+                            placeholder="https://www.youtube.com/watch?v=..."
+                            className="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-[#59D66F] focus:ring-2 focus:ring-[#59D66F]/20"
+                        />
+
+                        <p className="mt-2 text-xs text-slate-500">
+                            Link YouTube akan ditampilkan sebagai tombol di halaman detail proyek.
+                        </p>
 
                     </div>
 

@@ -46,6 +46,7 @@ model Project {
   // Media Assets
   thumbnailImage  String    // URL dari Cloudinary
   galleryImages   String[]  // Array URL dari Cloudinary
+  youtubeUrl      String?   // Optional YouTube video link
   
   // Timestamps & Data Protection (Soft Delete)
   createdAt       DateTime  @default(now())

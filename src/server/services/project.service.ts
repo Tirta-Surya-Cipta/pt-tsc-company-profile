@@ -53,6 +53,7 @@ export class ProjectService {
       highlights: validatedData.highlights,
       thumbnailImage: validatedData.thumbnailImage,
       galleryImages: validatedData.galleryImages,
+      youtubeUrl: validatedData.youtubeUrl || null,
     };
 
     return projectRepository.create(createData);
@@ -91,6 +92,7 @@ export class ProjectService {
       highlights: validatedData.highlights,
       thumbnailImage: validatedData.thumbnailImage,
       galleryImages: validatedData.galleryImages,
+      youtubeUrl: validatedData.youtubeUrl !== undefined ? (validatedData.youtubeUrl || null) : undefined,
     };
 
     return projectRepository.update(id, updateData);
