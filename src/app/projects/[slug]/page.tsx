@@ -8,7 +8,7 @@ import ProjectHeroGallery from './ProjectHeroGallery';
 import {
     ArrowLeft, ArrowRight, Calendar, MapPin,
     Building2, Settings, CheckCircle2, AlertCircle,
-    Lightbulb, ChevronRight, Activity, BarChart2,
+    Lightbulb, ChevronRight, Activity, BarChart2, PlayCircle,
 } from 'lucide-react';
 
 export const revalidate = 0;
@@ -163,6 +163,19 @@ export default async function ProjectDetailPage({
                             <Link href="/projects/all" className="inline-flex items-center gap-2 mt-8 text-gray-400 text-sm hover:text-[#59D66F] transition-colors opacity-0 animate-[fadeUp_0.5s_ease_0.5s_forwards]">
                                 <ArrowLeft size={14} /> Back to Projects
                             </Link>
+
+                            {/* YouTube Button */}
+                            {project.youtubeUrl && (
+                                <a
+                                    href={project.youtubeUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center gap-2.5 mt-4 self-start px-5 py-2.5 rounded-full bg-[#FF0000]/10 border border-[#FF0000]/30 text-[#FF4444] text-sm font-semibold hover:bg-[#FF0000]/20 hover:border-[#FF0000]/60 transition-all duration-200 opacity-0 animate-[fadeUp_0.5s_ease_0.55s_forwards]"
+                                >
+                                    <PlayCircle size={16} className="shrink-0" />
+                                    Watch Project Video
+                                </a>
+                            )}
                         </div>
 
                         {/* Right: Interactive Hero Gallery */}

@@ -73,6 +73,8 @@ export default async function EditProjectPage({
             project.thumbnailImage,
           galleryImages:
             project.galleryImages,
+          youtubeUrl:
+            project.youtubeUrl ?? "",
         }}
       />
 

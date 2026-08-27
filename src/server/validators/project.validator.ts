@@ -26,6 +26,7 @@ export const projectSchema = z.object({
   highlights: z.array(z.string()).default([]),
   thumbnailImage: z.string().min(1, "Thumbnail image is required"),
   galleryImages: z.array(z.string()).default([]),
+  youtubeUrl: z.string().url("YouTube URL tidak valid").optional().or(z.literal("")),
 });
 
 export type ProjectInput = z.infer<typeof projectSchema>;
