@@ -5,7 +5,23 @@ import { ArrowLeft } from "lucide-react";
 export const metadata: Metadata = {
   title: "Privacy Policy | PT Tirta Surya Cipta",
   description:
-    "Learn how PT Tirta Surya Cipta collects, uses, and protects information submitted through our website, including contact inquiries and request for quote submissions.",
+    "Learn how PT Tirta Surya Cipta collects, uses, and protects information submitted through our website and contact forms.",
+  robots: {
+    index: false,
+    follow: false,
+  },
+  alternates: {
+    canonical: "https://www.tirtasuryacipta.com/privacy-policy",
+  },
+  openGraph: {
+    title: "Privacy Policy | PT Tirta Surya Cipta",
+    description:
+      "Learn how PT Tirta Surya Cipta collects, uses, and protects information submitted through our website and contact forms.",
+    url: "https://www.tirtasuryacipta.com/privacy-policy",
+    siteName: "PT Tirta Surya Cipta",
+    locale: "en_US",
+    type: "website",
+  },
 };
 
 export default function PrivacyPolicyPage() {

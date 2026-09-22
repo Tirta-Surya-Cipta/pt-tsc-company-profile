@@ -5,7 +5,23 @@ import { ArrowLeft } from "lucide-react";
 export const metadata: Metadata = {
   title: "Terms and Conditions | PT Tirta Surya Cipta",
   description:
-    "Terms and conditions governing the use of PT Tirta Surya Cipta's website, including acceptable use, intellectual property, request for quote terms, and disclaimers.",
+    "Terms and conditions governing the use of PT Tirta Surya Cipta website, services information, quote requests, and disclaimers.",
+  robots: {
+    index: false,
+    follow: false,
+  },
+  alternates: {
+    canonical: "https://www.tirtasuryacipta.com/terms-and-conditions",
+  },
+  openGraph: {
+    title: "Terms and Conditions | PT Tirta Surya Cipta",
+    description:
+      "Terms and conditions governing the use of PT Tirta Surya Cipta website, services information, quote requests, and disclaimers.",
+    url: "https://www.tirtasuryacipta.com/terms-and-conditions",
+    siteName: "PT Tirta Surya Cipta",
+    locale: "en_US",
+    type: "website",
+  },
 };
 
 export default function TermsAndConditionsPage() {

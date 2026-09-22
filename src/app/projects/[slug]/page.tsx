@@ -1,6 +1,8 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
+import { projectRepository } from '@/server/repositories/project.repository';
 import CtaBanner from '@/components/shared/CtaBanner';
 import ProjectHeroGallery from './ProjectHeroGallery';
 import {
@@ -11,6 +13,57 @@ import {
 
 export const revalidate = 0;
 
+export async function generateMetadata({
+    params,
+}: {
+    params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+    const { slug } = await params;
+    const project = await projectRepository.findBySlug(slug);
+
+    if (!project) {
+        return {
+            title: 'Project Not Found | PT Tirta Surya Cipta',
+            description: 'The requested project case study could not be found.',
+            robots: { index: false, follow: false },
+        };
+    }
+
+    const title = `${project.title.slice(0, 42)} | TSC`;
+    const description = (project.overview || project.challenge || 'Industrial automation project case study by PT Tirta Surya Cipta.').slice(0, 155);
+    const ogImage = project.thumbnailImage || 'https://www.tirtasuryacipta.com/images/vfd.webp';
+
+    return {
+        title,
+        description,
+        alternates: {
+            canonical: `https://www.tirtasuryacipta.com/projects/${project.slug}`,
+        },
+        openGraph: {
+            title: `${project.title} | PT Tirta Surya Cipta`,
+            description,
+            url: `https://www.tirtasuryacipta.com/projects/${project.slug}`,
+            siteName: 'PT Tirta Surya Cipta',
+            locale: 'en_US',
+            type: 'article',
+            images: [
+                {
+                    url: ogImage,
+                    width: 1200,
+                    height: 630,
+                    alt: project.title,
+                },
+            ],
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title: `${project.title} | PT Tirta Surya Cipta`,
+            description,
+            images: [ogImage],
+        },
+    };
+}
+
 export default async function ProjectDetailPage({
     params,
 }: {
@@ -18,9 +71,7 @@ export default async function ProjectDetailPage({
 }) {
     const { slug } = await params;
 
-    const project = await prisma.project.findFirst({
-        where: { slug, deletedAt: null },
-    });
+    const project = await projectRepository.findBySlug(slug);
 
     if (!project) notFound();
 
@@ -34,6 +85,31 @@ export default async function ProjectDetailPage({
     const gallery = project.galleryImages || [];
     const tag = project.applicationType ?? project.services ?? 'Project';
 
+    const breadcrumbJsonLd = {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+            {
+                '@type': 'ListItem',
+                position: 1,
+                name: 'Home',
+                item: 'https://www.tirtasuryacipta.com',
+            },
+            {
+                '@type': 'ListItem',
+                position: 2,
+                name: 'Projects',
+                item: 'https://www.tirtasuryacipta.com/projects',
+            },
+            {
+                '@type': 'ListItem',
+                position: 3,
+                name: project.title,
+                item: `https://www.tirtasuryacipta.com/projects/${project.slug}`,
+            },
+        ],
+    };
+
     const infoRows = [
         { label: 'Industry', icon: Building2, value: project.industryType ?? '—' },
         { label: 'Application', icon: Settings, value: project.applicationType ?? '—' },
@@ -46,6 +122,10 @@ export default async function ProjectDetailPage({
 
     return (
         <main>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+            />
             {/* ══ HERO ══ */}
             <section className="relative bg-[#071A14] overflow-hidden min-h-[500px] lg:min-h-[600px] flex items-center">
                 <div className="w-full max-w-7xl mx-auto px-6 lg:px-12 pt-32 pb-24">
