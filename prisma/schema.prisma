@@ -71,6 +71,20 @@ model Partner {
 }
 
 // ------------------------------------------------------
+// 3b. Model Client / Our Clients Logo Showcase
+// ------------------------------------------------------
+model Client {
+  id           String    @id @default(cuid())
+  name         String
+  logoUrl      String    // URL dari Cloudinary
+  displayOrder Int       @default(0) // Untuk mengatur urutan tampilan logo
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@index([displayOrder])
+}
+
+// ------------------------------------------------------
 // 4. Model Inbox Form (Contact & Quote)
 // ------------------------------------------------------
 model ContactMessage {

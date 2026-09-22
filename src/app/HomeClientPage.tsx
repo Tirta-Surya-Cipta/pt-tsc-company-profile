@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import CtaBanner from '@/components/shared/CtaBanner';
+import ClientSection from '@/components/shared/ClientSection';
 import PartnerSection from '@/components/shared/PartnerSection';
 import {
   ArrowRight,
@@ -306,6 +307,9 @@ export default function HomeClientPage() {
           </div>
         </div>
       </section>
+
+      {/* ══ CLIENTS ══ */}
+      <ClientSection />
 
       {/* ══ PARTNERS ══ */}
       <PartnerSection />
