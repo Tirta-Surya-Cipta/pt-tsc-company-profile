@@ -5,6 +5,7 @@ import {
     LayoutDashboard,
     FolderOpen,
     Users,
+    Building2,
     MessageSquare,
     LogOut,
 } from "lucide-react";
@@ -65,6 +66,9 @@ export default async function AdminLayout({
                         </Link>
                         <Link href="/admin/partners" className="flex items-center gap-3 rounded-lg px-4 py-3 hover:bg-[#59D66F]/10 hover:text-[#1F6B45]">
                             <Users size={20} /> Partners
+                        </Link>
+                        <Link href="/admin/clients" className="flex items-center gap-3 rounded-lg px-4 py-3 hover:bg-[#59D66F]/10 hover:text-[#1F6B45]">
+                            <Building2 size={20} /> Clients
                         </Link>
                         <Link href="/admin/messages" className="flex items-center gap-3 rounded-lg px-4 py-3 hover:bg-[#59D66F]/10 hover:text-[#1F6B45]">
                             <MessageSquare size={20} /> Messages
