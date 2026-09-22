@@ -2,7 +2,6 @@
 
 import { useEffect, useState, useRef, useCallback } from "react";
 import NextImage from "next/image";
-import { Shield } from "lucide-react";
 
 interface Client {
   id: string;
@@ -72,7 +71,7 @@ export default function ClientSection() {
             {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
               <div
                 key={i}
-                className="px-8 py-5 bg-white rounded-xl border border-gray-100 w-[140px] h-[72px] animate-pulse"
+                className="bg-white rounded-xl border border-gray-100 w-[140px] sm:w-[150px] h-[72px] sm:h-[76px] animate-pulse shadow-sm"
               />
             ))}
           </div>
@@ -108,8 +107,7 @@ export default function ClientSection() {
             Trusted by Growing Businesses
           </h2>
           <p className="text-[#6B7280] text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
-            We work with industry leaders and forward-thinking companies to keep
-            their water systems running at their best.
+            Partnering with commercial and industrial leaders across Indonesia to optimize operations with intelligent automation and reliable electrical systems.
           </p>
         </div>
 
@@ -122,18 +120,18 @@ export default function ClientSection() {
             {currentItems.map((client, i) => (
               <div
                 key={client.id}
-                className="group flex items-center justify-center px-7 py-5 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-[#59D66F]/30 transition-all duration-300 min-w-[130px] h-[72px]"
+                className="group flex items-center justify-center px-4 py-2.5 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-[#59D66F]/40 transition-all duration-300 w-[140px] sm:w-[150px] h-[72px] sm:h-[76px]"
                 style={{
                   animation: `fadeSlideUp 0.4s ease ${i * 50}ms both`,
                 }}
               >
-                <div className="w-[100px] h-[40px] relative">
+                <div className="w-[110px] sm:w-[122px] h-[48px] sm:h-[54px] relative">
                   <NextImage
                     src={client.logoUrl}
                     alt={client.name}
                     fill
-                    className="object-contain opacity-70 group-hover:opacity-100 transition-opacity duration-300"
-                    sizes="100px"
+                    className="object-contain transition-transform duration-300 group-hover:scale-105"
+                    sizes="(max-width: 640px) 110px, 122px"
                   />
                 </div>
               </div>
@@ -159,23 +157,10 @@ export default function ClientSection() {
           </div>
         )}
 
-        {/* Bottom CTA Banner */}
-        <div className="mt-12 flex justify-center">
-          <div className="inline-flex items-center gap-4 px-8 py-4 rounded-2xl bg-white border border-gray-100 shadow-sm">
-            <div className="w-10 h-10 rounded-xl bg-[#DDE9E2] flex items-center justify-center shrink-0">
-              <Shield size={18} className="text-[#1F6B45]" />
-            </div>
-            <div>
-              <p className="text-[#1E293B] text-xs font-bold tracking-wider uppercase">
-                Partner for Long-Term Reliability
-              </p>
-              <p className="text-[#6B7280] text-xs mt-0.5">
-                Let&apos;s build a more efficient and sustainable water system,
-                together.
-              </p>
-            </div>
-          </div>
-        </div>
+        {/* Supporting SEO Text */}
+        <p className="text-center text-[#6B7280] text-xs sm:text-sm mt-8 max-w-2xl mx-auto leading-relaxed">
+          Trusted by manufacturing, commercial, and industrial enterprises across Indonesia for dependable industrial automation, control system engineering, and electrical panel solutions.
+        </p>
       </div>
 
       {/* Animation keyframes */}
